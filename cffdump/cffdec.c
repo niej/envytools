@@ -928,6 +928,12 @@ dump_domain(uint32_t *dwords, uint32_t sizedwords, int level,
 static uint32_t bin_x1, bin_x2, bin_y1, bin_y2;
 static unsigned mode;
 static const char *render_mode;
+static enum {
+	MODE_BINNING = 0x1,
+	MODE_GMEM    = 0x2,
+	MODE_BYPASS  = 0x4,
+	MODE_ALL     = MODE_BINNING | MODE_GMEM | MODE_BYPASS,
+} enable_mask = MODE_ALL;
 static bool skip_ib2_enable_global;
 static bool skip_ib2_enable_local;
 
@@ -2077,24 +2083,7 @@ load_group(unsigned group_id, int level)
 	if (options->gpu_id >= 600) {
 		printl(2, "%senable_mask: 0x%x\n", levels[level], ds->enable_mask);
 
-		/* a6xx seems to be a bit more sophisticated, it can emit
-		 * different, potentially conflicting, state-groups for
-		 * binning pass vs draw.  So we need to figure out the
-		 * current mode and only dump_commands() for the enabled
-		 * state-groups:
-		 *
-		 * This is probably not quite right, but is a reasonable
-		 * first-pass approximation for now..
-		 */
-		unsigned mode;
-
-		if (draw_mode == 1) {
-			mode = 0x1;
-		} else {
-			mode = 0x6;
-		}
-
-		if (!(ds->enable_mask & mode)) {
+		if (!(ds->enable_mask & enable_mask)) {
 			printl(2, "%s\tskipped!\n\n", levels[level]);
 			return;
 		}
@@ -2215,6 +2204,14 @@ static void
 cp_set_marker(uint32_t *dwords, uint32_t sizedwords, int level)
 {
 	render_mode = rnn_enumname(rnn, "a6xx_render_mode", dwords[0] & 0xf);
+
+	if (!strcmp(render_mode, "RM6_BINNING")) {
+		enable_mask = MODE_BINNING;
+	} else if (!strcmp(render_mode, "RM6_GMEM")) {
+		enable_mask = MODE_GMEM;
+	} else if (!strcmp(render_mode, "RM6_BYPASS")) {
+		enable_mask = MODE_BYPASS;
+	}
 }
 
 static void
