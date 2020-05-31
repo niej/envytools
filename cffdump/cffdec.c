@@ -980,11 +980,8 @@ skip_query(void)
 	return true;
 }
 
-/* well, actually query and script..
- * NOTE: call this before dump_register_summary()
- */
 static void
-do_query(const char *primtype, uint32_t num_indices)
+__do_query(const char *primtype, uint32_t num_indices)
 {
 	int n = 0;
 
@@ -997,12 +994,6 @@ do_query(const char *primtype, uint32_t num_indices)
 		bin_x2 = scissor_br & 0xffff;
 		bin_y2 = scissor_br >> 16;
 	}
-
-	if (script_draw)
-		script_draw(primtype, num_indices);
-
-	if (skip_query())
-		return;
 
 	for (int i = 0; i < options->nquery; i++) {
 		uint32_t regbase = queryvals[i];
@@ -1030,6 +1021,21 @@ do_query(const char *primtype, uint32_t num_indices)
 
 	if (n > 1)
 		printf("\n");
+}
+
+/* well, actually query and script..
+ * NOTE: call this before dump_register_summary()
+ */
+static void
+do_query(const char *primtype, uint32_t num_indices)
+{
+	if (script_draw)
+		script_draw(primtype, num_indices);
+
+	if (skip_query())
+		return;
+
+	__do_query(primtype, num_indices);
 }
 
 static void
