@@ -87,6 +87,12 @@ static void print_usage(const char *name)
 			"\t                   each draw; multiple --query/-q args can be given to\n"
 			"\t                   dump multiple registers; register can be specified\n"
 			"\t                   either by name or numeric offset\n"
+			"\t--query-all      - in query mode, show all queried regs on each draw\n"
+			"\t                   (default query mode)\n"
+			"\t--query-written  - in query mode, show queried regs on draws if any of\n"
+			"\t                   them have been written since previous draw\n"
+			"\t--query-delta    - in query mode, show queried regs on draws if any of\n"
+			"\t                   them have changed since previous draw\n"
 			"\t-h, --help       - show this message\n"
 			, name);
 	exit(2);
@@ -101,6 +107,9 @@ static const struct option opts[] = {
 	{ "pager",           no_argument, &interactive,           1 },
 	{ "textures",        no_argument, &options.dump_textures, 1 },
 	{ "show-compositor", no_argument, &show_comp,             1 },
+	{ "query-all",       no_argument, &options.query_mode,    QUERY_ALL },
+	{ "query-written",   no_argument, &options.query_mode,    QUERY_WRITTEN },
+	{ "query-delta",     no_argument, &options.query_mode,    QUERY_DELTA },
 
 	/* Long opts with short alias: */
 	{ "verbose",   no_argument,       0, 'v' },
@@ -185,6 +194,11 @@ int main(int argc, char **argv)
 
 	if (ret)
 		print_usage(argv[0]);
+
+	if (options.query_mode && !options.nquery) {
+		fprintf(stderr, "query options only valid in query mode!\n");
+		print_usage(argv[0]);
+	}
 
 	script_finish();
 

@@ -26,6 +26,21 @@
 
 #include <stdbool.h>
 
+enum {
+	/* default mode, dump all queried regs on each draw: */
+	QUERY_ALL = 0,
+
+	/* only dump if any of the queried regs were written
+	 * since last draw:
+	 */
+	QUERY_WRITTEN,
+
+	/* only dump if any of the queried regs changed since
+	 * last draw:
+	 */
+	QUERY_DELTA,
+} query_mode;
+
 struct cffdec_options {
 	unsigned gpu_id;
 	int draw_filter;
@@ -36,6 +51,8 @@ struct cffdec_options {
 	int dump_textures;
 	int decode_markers;
 	char *script;
+
+	int query_mode;     /* enum query_mode */
 	char **querystrs;
 	int nquery;
 

@@ -946,13 +946,46 @@ print_mode(int level)
 	}
 }
 
+static bool
+skip_query(void)
+{
+	switch (options->query_mode) {
+	case QUERY_ALL:
+		/* never skip: */
+		return false;
+	case QUERY_WRITTEN:
+		for (int i = 0; i < options->nquery; i++) {
+			uint32_t regbase = queryvals[i];
+			if (!reg_written(regbase)) {
+				continue;
+			}
+			if (reg_rewritten(regbase)) {
+				return false;
+			}
+		}
+		return true;
+	case QUERY_DELTA:
+		for (int i = 0; i < options->nquery; i++) {
+			uint32_t regbase = queryvals[i];
+			if (!reg_written(regbase)) {
+				continue;
+			}
+			uint32_t lastval = reg_val(regbase);
+			if (lastval != lastvals[regbase]) {
+				return false;
+			}
+		}
+		return true;
+	}
+	return true;
+}
+
 /* well, actually query and script..
  * NOTE: call this before dump_register_summary()
  */
 static void
 do_query(const char *primtype, uint32_t num_indices)
 {
-	int i;
 	int n = 0;
 
 	if ((500 <= options->gpu_id) && (options->gpu_id < 700)) {
@@ -965,7 +998,13 @@ do_query(const char *primtype, uint32_t num_indices)
 		bin_y2 = scissor_br >> 16;
 	}
 
-	for (i = 0; i < options->nquery; i++) {
+	if (script_draw)
+		script_draw(primtype, num_indices);
+
+	if (skip_query())
+		return;
+
+	for (int i = 0; i < options->nquery; i++) {
 		uint32_t regbase = queryvals[i];
 		if (reg_written(regbase)) {
 			uint32_t lastval = reg_val(regbase);
@@ -991,9 +1030,6 @@ do_query(const char *primtype, uint32_t num_indices)
 
 	if (n > 1)
 		printf("\n");
-
-	if (script_draw)
-		script_draw(primtype, num_indices);
 }
 
 static void
