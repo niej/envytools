@@ -56,6 +56,13 @@ struct cffdec_options {
 	char **querystrs;
 	int nquery;
 
+	/* In "once" mode, only decode a cmdstream buffer once (per draw
+	 * mode, in the case of a6xx+ where a single cmdstream buffer can
+	 * be used for both binning and draw pass), rather than each time
+	 * encountered (ie. once per tile/bin in GMEM draw passes)
+	 */
+	int once;
+
 	/* for crashdec, where we know CP_IBx_REM_SIZE, we can use this
 	 * to highlight the cmdstream not parsed yet, to make it easier
 	 * to see how far along the CP is.

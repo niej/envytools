@@ -26,6 +26,7 @@
  * host address while decoding cmdstream/crashdumps
  */
 
+#include <assert.h>
 #include <stdlib.h>
 
 #include "buffers.h"
@@ -34,6 +35,15 @@ struct buffer {
 	void *hostptr;
 	unsigned int len;
 	uint64_t gpuaddr;
+
+	/* for 'once' mode, for buffers containing cmdstream keep track per offset
+	 * into buffer of which modes it has already been dumped;
+	 */
+	struct {
+		unsigned offset;
+		unsigned dumped_mask;
+	} offsets[64];
+	unsigned noffsets;
 };
 
 static struct buffer buffers[512];
@@ -98,6 +108,45 @@ hostlen(uint64_t gpuaddr)
 	return 0;
 }
 
+bool
+has_dumped(uint64_t gpuaddr, unsigned enable_mask)
+{
+	if (!gpuaddr)
+		return false;
+
+	for (int i = 0; i < nbuffers; i++) {
+		if (buffer_contains_gpuaddr(&buffers[i], gpuaddr, 0)) {
+			struct buffer *b = &buffers[i];
+			assert(gpuaddr >= b->gpuaddr);
+			unsigned offset = gpuaddr - b->gpuaddr;
+
+			unsigned n = 0;
+			while (n < b->noffsets) {
+				if (offset == b->offsets[n].offset)
+					break;
+				n++;
+			}
+
+			/* if needed, allocate a new offset entry: */
+			if (n == b->noffsets) {
+				b->noffsets++;
+				assert(b->noffsets < ARRAY_SIZE(b->offsets));
+				b->offsets[n].dumped_mask = 0;
+				b->offsets[n].offset = offset;
+			}
+
+			if ((b->offsets[n].dumped_mask & enable_mask) == enable_mask)
+				return true;
+
+			b->offsets[n].dumped_mask |= enable_mask;
+
+			return false;
+		}
+	}
+
+	return false;
+}
+
 void
 reset_buffers(void)
 {
@@ -105,6 +154,7 @@ reset_buffers(void)
 		free(buffers[i].hostptr);
 		buffers[i].hostptr = NULL;
 		buffers[i].len = 0;
+		buffers[i].noffsets = 0;
 	}
 	nbuffers = 0;
 }

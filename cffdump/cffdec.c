@@ -1995,6 +1995,9 @@ cp_indirect(uint32_t *dwords, uint32_t sizedwords, int level)
 		printf("%sibsize:%08x\n", levels[level], ibsize);
 	}
 
+	if (options->once && has_dumped(ibaddr, enable_mask))
+		return;
+
 	/* map gpuaddr back to hostptr: */
 	ptr = hostptr(ibaddr);
 
