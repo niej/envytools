@@ -93,6 +93,10 @@ static void print_usage(const char *name)
 			"\t                   them have been written since previous draw\n"
 			"\t--query-delta    - in query mode, show queried regs on draws if any of\n"
 			"\t                   them have changed since previous draw\n"
+			"\t--query-compare  - dump registers for BINNING vs GMEM/BYPASS per draw;\n"
+			"\t                   only applicable for regs set via SDS group (a6xx+),\n"
+			"\t                   implies --once, can be combined with --query-all,\n"
+			"\t                   --query-written, or --query-delta\n"
 			"\t--once           - decode cmdstream only once (per draw mode); if same\n"
 			"\t                   cmdstream is executed for each tile, this will decode\n"
 			"\t                   it only for the first tile and skip the remainder,\n"
@@ -115,6 +119,7 @@ static const struct option opts[] = {
 	{ "query-all",       no_argument, &options.query_mode,    QUERY_ALL },
 	{ "query-written",   no_argument, &options.query_mode,    QUERY_WRITTEN },
 	{ "query-delta",     no_argument, &options.query_mode,    QUERY_DELTA },
+	{ "query-compare",   no_argument, &options.query_compare, 1 },
 	{ "once",            no_argument, &options.once,          1 },
 
 	/* Long opts with short alias: */
@@ -201,7 +206,7 @@ int main(int argc, char **argv)
 	if (ret)
 		print_usage(argv[0]);
 
-	if (options.query_mode && !options.nquery) {
+	if ((options.query_mode || options.query_compare) && !options.nquery) {
 		fprintf(stderr, "query options only valid in query mode!\n");
 		print_usage(argv[0]);
 	}

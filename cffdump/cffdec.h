@@ -52,6 +52,7 @@ struct cffdec_options {
 	int decode_markers;
 	char *script;
 
+	int query_compare;  /* binning vs SYSMEM/GMEM compare mode */
 	int query_mode;     /* enum query_mode */
 	char **querystrs;
 	int nquery;

@@ -154,6 +154,10 @@ enum state_src_t {
 	STATE_SRC_BINDLESS,
 };
 
+/* SDS (CP_SET_DRAW_STATE) helpers: */
+static void load_all_groups(int level);
+static void disable_all_groups(void);
+
 static void dump_tex_samp(uint32_t *texsamp, enum state_src_t src, int num_unit, int level);
 static void dump_tex_const(uint32_t *texsamp, int num_unit, int level);
 static const char *regname(uint32_t regbase, int color);
@@ -1023,6 +1027,49 @@ __do_query(const char *primtype, uint32_t num_indices)
 		printf("\n");
 }
 
+static void
+do_query_compare(const char *primtype, uint32_t num_indices)
+{
+	unsigned saved_enable_mask = enable_mask;
+	const char *saved_render_mode = render_mode;
+
+	/* in 'query-compare' mode, we want to see if the register is writtten
+	 * or changed in any mode:
+	 *
+	 * (NOTE: this could cause false-positive for 'query-delta' if the reg
+	 * is written with different values in binning vs sysmem/gmem mode, as
+	 * we don't track previous values per-mode, but I think we can live with
+	 * that)
+	 */
+	enable_mask = MODE_ALL;
+
+	clear_rewritten();
+	load_all_groups(0);
+
+	if (!skip_query()) {
+		/* dump binning pass values: */
+		enable_mask = MODE_BINNING;
+		render_mode = "BINNING";
+		clear_rewritten();
+		load_all_groups(0);
+		__do_query(primtype, num_indices);
+
+		/* dump draw pass values: */
+		enable_mask = MODE_GMEM | MODE_BYPASS;
+		render_mode = "DRAW";
+		clear_rewritten();
+		load_all_groups(0);
+		__do_query(primtype, num_indices);
+
+		printf("\n");
+	}
+
+	enable_mask = saved_enable_mask;
+	render_mode = saved_render_mode;
+
+	disable_all_groups();
+}
+
 /* well, actually query and script..
  * NOTE: call this before dump_register_summary()
  */
@@ -1031,6 +1078,11 @@ do_query(const char *primtype, uint32_t num_indices)
 {
 	if (script_draw)
 		script_draw(primtype, num_indices);
+
+	if (options->query_compare) {
+		do_query_compare(primtype, num_indices);
+		return;
+	}
 
 	if (skip_query())
 		return;
@@ -2004,6 +2056,14 @@ cp_indirect(uint32_t *dwords, uint32_t sizedwords, int level)
 	if (options->once && has_dumped(ibaddr, enable_mask))
 		return;
 
+	/* 'query-compare' mode implies 'once' mode, although we need only to
+	 * process the cmdstream for *any* enable_mask mode, since we are
+	 * comparing binning vs draw reg values at the same time, ie. it is
+	 * not useful to process the same draw in both binning and draw pass.
+	 */
+	if (options->query_compare && has_dumped(ibaddr, MODE_ALL))
+		return;
+
 	/* map gpuaddr back to hostptr: */
 	ptr = hostptr(ibaddr);
 
@@ -2143,8 +2203,6 @@ load_group(unsigned group_id, int level)
 		dump_commands(ptr, ds->count, level+1);
 		ib--;
 	}
-
-	disable_group(group_id);
 }
 
 static void
@@ -2162,6 +2220,12 @@ load_all_groups(int level)
 	for (unsigned i = 0; i < ARRAY_SIZE(state); i++)
 		load_group(i, level);
 	loading_groups = false;
+
+	/* in 'query-compare' mode, defer disabling all groups until we have a
+	 * chance to process the query:
+	 */
+	if (!options->query_compare)
+		disable_all_groups();
 }
 
 static void
