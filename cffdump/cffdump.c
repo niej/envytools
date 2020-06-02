@@ -102,6 +102,7 @@ static void print_usage(const char *name)
 			"\t                   it only for the first tile and skip the remainder,\n"
 			"\t                   which can be useful when looking at state that does\n"
 			"\t                   not change per tile\n"
+			"\t--not-once       - decode cmdstream for each IB (default)\n"
 			"\t-h, --help       - show this message\n"
 			, name);
 	exit(2);
@@ -121,6 +122,7 @@ static const struct option opts[] = {
 	{ "query-delta",     no_argument, &options.query_mode,    QUERY_DELTA },
 	{ "query-compare",   no_argument, &options.query_compare, 1 },
 	{ "once",            no_argument, &options.once,          1 },
+	{ "not-once",        no_argument, &options.once,          0 },
 
 	/* Long opts with short alias: */
 	{ "verbose",   no_argument,       0, 'v' },
