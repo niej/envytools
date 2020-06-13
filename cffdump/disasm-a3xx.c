@@ -1596,7 +1596,8 @@ static bool print_instr(struct disasm_ctx *ctx, uint32_t *dwords, int n)
 		ctx->repeatidx = 0;
 	}
 
-	return (instr->opc_cat == 0) && (opc == OPC_END);
+	return (instr->opc_cat == 0) &&
+		((opc == OPC_END) || (opc == OPC_CHSH));
 }
 
 int disasm_a3xx(uint32_t *dwords, int sizedwords, int level, FILE *out, unsigned gpu_id)
