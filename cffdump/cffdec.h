@@ -26,7 +26,7 @@
 
 #include <stdbool.h>
 
-enum {
+enum query_mode {
 	/* default mode, dump all queried regs on each draw: */
 	QUERY_ALL = 0,
 
@@ -39,7 +39,7 @@ enum {
 	 * last draw:
 	 */
 	QUERY_DELTA,
-} query_mode;
+};
 
 struct cffdec_options {
 	unsigned gpu_id;
