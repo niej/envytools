@@ -946,7 +946,7 @@ opcode: CP_LOAD_STATE4 (30) (4 dwords)
 
 <domain name="CP_REG_TO_MEM" width="32">
 	<reg32 offset="0" name="0">
-		<bitfield name="REG" low="0" high="15" type="hex"/>
+		<bitfield name="REG" low="0" high="17" type="hex"/>
 		<!-- number of registers/dwords copied is max(CNT, 1). -->
 		<bitfield name="CNT" low="18" high="29" type="uint"/>
 		<bitfield name="64B" pos="30" type="boolean"/>
@@ -967,7 +967,7 @@ opcode: CP_LOAD_STATE4 (30) (4 dwords)
                 registers.
 	</doc>
 	<reg32 offset="0" name="0">
-		<bitfield name="REG" low="0" high="15" type="hex"/>
+		<bitfield name="REG" low="0" high="17" type="hex"/>
 		<!-- number of registers/dwords copied is max(CNT, 1). -->
 		<bitfield name="CNT" low="18" high="29" type="uint"/>
 		<bitfield name="64B" pos="30" type="boolean"/>
@@ -992,7 +992,7 @@ opcode: CP_LOAD_STATE4 (30) (4 dwords)
                 offsetted using a DWORD in memory.
 	</doc>
 	<reg32 offset="0" name="0">
-		<bitfield name="REG" low="0" high="15" type="hex"/>
+		<bitfield name="REG" low="0" high="17" type="hex"/>
 		<!-- number of registers/dwords copied is max(CNT, 1). -->
 		<bitfield name="CNT" low="18" high="29" type="uint"/>
 		<bitfield name="64B" pos="30" type="boolean"/>
@@ -1014,7 +1014,7 @@ opcode: CP_LOAD_STATE4 (30) (4 dwords)
 
 <domain name="CP_MEM_TO_REG" width="32">
 	<reg32 offset="0" name="0">
-		<bitfield name="REG" low="0" high="15" type="hex"/>
+		<bitfield name="REG" low="0" high="17" type="hex"/>
 		<!-- number of registers/dwords copied is max(CNT, 1). -->
 		<bitfield name="CNT" low="19" high="29" type="uint"/>
 		<!-- shift each DWORD left by 2 while copying -->
@@ -1507,7 +1507,7 @@ opcode: CP_LOAD_STATE4 (30) (4 dwords)
 	</doc>
 	<reg32 offset="0" name="0">
 		<!-- the register to test -->
-		<bitfield name="REG" low="0" high="11"/>
+		<bitfield name="REG" low="0" high="17"/>
 		<!-- the bit to test -->
 		<bitfield name="BIT" low="20" high="24" type="uint"/>
 		<!-- execute CP_WAIT_FOR_ME beforehand -->
