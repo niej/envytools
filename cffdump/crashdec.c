@@ -457,7 +457,7 @@ dump_cp_seq_stat(uint32_t *stat)
 
 	for (int i = 0; i < 16; i++) {
 		printf("\t$%02x: %08x\t\t$%02x: %08x\n",
-				i, stat[i], i + 16, stat[i + 16]);
+				i + 1, stat[i], i + 16 + 1, stat[i + 16]);
 	}
 }
 
