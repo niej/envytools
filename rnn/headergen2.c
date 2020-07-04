@@ -32,6 +32,7 @@
 
 #include "rnn.h"
 #include "util.h"
+#include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <inttypes.h>
@@ -62,6 +63,8 @@ struct fout {
 struct fout *fouts = 0;
 int foutsnum = 0;
 int foutsmax = 0;
+
+static bool no_asserts = false;
 
 static void seekcol (FILE *f, int src, int dst) {
 	if (dst <= src)
@@ -172,7 +175,7 @@ static void printtypeinfo (struct rnntypeinfo *ti, struct rnnbitfield *bf,
 		fprintf(dst, "static inline uint32_t %s(%s val)\n", prefix, typename);
 		fprintf(dst, "{\n");
 
-		if (ti->minvalid || ti->maxvalid || ti->alignvalid) {
+		if ((ti->minvalid || ti->maxvalid || ti->alignvalid) && !no_asserts) {
 			fprintf(dst, "\tassert(1");
 			if (ti->minvalid)
 				fprintf(dst, " && (val >= %lu)", ti->min);
@@ -183,7 +186,7 @@ static void printtypeinfo (struct rnntypeinfo *ti, struct rnnbitfield *bf,
 			fprintf(dst, ");\n");
 		}
 
-		if (ti->shr) {
+		if (ti->shr && !no_asserts) {
 			fprintf(dst, "\tassert(!(val & 0x%x));\n", (1 << ti->shr) - 1);
 		}
 
@@ -414,6 +417,7 @@ static void printhead(struct fout f, struct rnndb *db) {
 }
 
 int main(int argc, char **argv) {
+	char *file;
 	struct rnndb *db;
 	int i, j;
 
@@ -422,9 +426,16 @@ int main(int argc, char **argv) {
 		exit(1);
 	}
 
+	if ((argc >= 3) && !strcmp(argv[1], "--no-asserts")) {
+		no_asserts = true;
+		file = argv[2];
+	} else {
+		file = argv[1];
+	}
+
 	rnn_init();
 	db = rnn_newdb();
-	rnn_parsefile (db, argv[1]);
+	rnn_parsefile (db, file);
 	rnn_prepdb (db);
 	for(i = 0; i < db->filesnum; ++i) {
 		char *dstname = malloc(strlen(db->files[i]) + 3);
