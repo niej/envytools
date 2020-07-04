@@ -224,7 +224,7 @@ xsi:schemaLocation="http://nouveau.freedesktop.org/ rules-ng.xsd">
 	<reg32 offset="0x000b8" name="HS_TIMER_CTRL">
 		<bitfield name="HS_TX_TO" low="0" high="15" type="uint"/>
 		<bitfield name="TIMER_RESOLUTION" low="16" high="19" type="uint"/>
-		<bifield name="HS_TX_TO_STOP_EN" pos="28" type="boolean"/>
+		<bitfield name="HS_TX_TO_STOP_EN" pos="28" type="boolean"/>
 	</reg32>
 	<reg32 offset="0x000bc" name="TIMEOUT_STATUS"/>
 	<reg32 offset="0x000c0" name="CLKOUT_TIMING_CTRL">
