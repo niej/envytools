@@ -136,10 +136,18 @@ struct rnntypeinfo {
 	struct rnnvalue **vals;
 	int valsnum;
 	int valsmax;
-	int shr;
+	int shr, low, high;
 	uint64_t min, max, align, radix;
 	int minvalid, maxvalid, alignvalid, radixvalid;
 };
+
+static inline uint64_t typeinfo_mask(struct rnntypeinfo *ti)
+{
+	if (ti->high == 63)
+		return -(1ULL << ti->low);
+	else
+		return (1ULL << (ti->high + 1)) - (1ULL << ti->low);
+}
 
 struct rnnbitset {
 	char *name;
@@ -155,8 +163,6 @@ struct rnnbitset {
 
 struct rnnbitfield {
 	char *name;
-	int low, high;
-	uint64_t mask;
 	struct rnnvarinfo varinfo;
 	struct rnntypeinfo typeinfo;
 	char *fullname;

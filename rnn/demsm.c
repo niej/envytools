@@ -158,7 +158,7 @@ static void printval(struct rnndeccontext *ctx, uint32_t addr, uint32_t val, uin
 	if (d && d->dom) {
 		uint32_t off = addr - d->base;
 		struct rnndecaddrinfo *ai = rnndec_decodeaddr(ctx, d->dom, off >> d->shift, op);
-		char *decoded_val = rnndec_decodeval(ctx, ai->typeinfo, val, ai->width);
+		char *decoded_val = rnndec_decodeval(ctx, ai->typeinfo, val);
 		if (origaddr != addr) {
 			printf("%08x:!%9s:%-30s %s", val, d->dom->name, ai->name, decoded_val);
 		} else {

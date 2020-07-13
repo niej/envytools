@@ -131,8 +131,7 @@ pretty_method(struct state *s, struct ent *e, uint32_t x)
 		ai = rnndec_decodeaddr(obj->ctx, s->dom, dma->addr, true);
 
 		dec_addr = ai->name;
-		dec_val = rnndec_decodeval(obj->ctx, ai->typeinfo, x,
-					   ai->width);
+		dec_val = rnndec_decodeval(obj->ctx, ai->typeinfo, x);
 
 		free(ai);
 	} else {

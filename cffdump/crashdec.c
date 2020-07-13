@@ -411,7 +411,7 @@ dump_register(struct rnn *rnn, uint32_t offset, uint32_t value)
 {
 	struct rnndecaddrinfo *info = rnn_reginfo(rnn, offset);
 	if (info && info->typeinfo) {
-		char *decoded = rnndec_decodeval(rnn->vc, info->typeinfo, value, info->width);
+		char *decoded = rnndec_decodeval(rnn->vc, info->typeinfo, value);
 		printf("%s: %s\n", info->name, decoded);
 	} else if (info) {
 		printf("%s: %08x\n", info->name, value);

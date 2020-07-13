@@ -351,8 +351,8 @@ static int l_rnn_reg_meta_index(lua_State *L)
 		if (!strcmp(name, bf->name)) {
 			uint32_t regval = rnn_val(rnndoff->rnn, rnndoff->offset);
 
-			regval &= bf->mask;
-			regval >>= bf->low;
+			regval &= typeinfo_mask(&bf->typeinfo);
+			regval >>= bf->typeinfo.low;
 			regval <<= bf->typeinfo.shr;
 
 			DBG("name=%s, info=%p, subelemsnum=%d, type=%d, regval=%x",
@@ -375,7 +375,7 @@ static int l_rnn_reg_meta_tostring(lua_State *L)
 	char *decoded;
 	if (info && info->typeinfo) {
 		decoded = rnndec_decodeval(rnndoff->rnn->vc,
-				info->typeinfo, regval, info->width);
+				info->typeinfo, regval);
 	} else {
 		asprintf(&decoded, "%08x", regval);
 	}
@@ -493,7 +493,7 @@ static int l_rnn_regval(lua_State *L)
 	struct rnndecaddrinfo *info = rnn_reginfo(rnn, regbase);
 	char *decoded;
 	if (info && info->typeinfo) {
-		decoded = rnndec_decodeval(rnn->vc, info->typeinfo, regval, info->width);
+		decoded = rnndec_decodeval(rnn->vc, info->typeinfo, regval);
 	} else {
 		asprintf(&decoded, "%08x", regval);
 	}

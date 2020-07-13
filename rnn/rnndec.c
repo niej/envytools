@@ -131,7 +131,8 @@ char *rnndec_decode_enum(struct rnndeccontext *ctx, const char *enumname, uint64
 	return NULL;
 }
 
-char *rnndec_decodeval(struct rnndeccontext *ctx, struct rnntypeinfo *ti, uint64_t value, int width) {
+char *rnndec_decodeval(struct rnndeccontext *ctx, struct rnntypeinfo *ti, uint64_t value) {
+	int width = ti->high - ti->low + 1;
 	char *res = 0;
 	int i;
 	struct rnnvalue **vals;
@@ -139,10 +140,12 @@ char *rnndec_decodeval(struct rnndeccontext *ctx, struct rnntypeinfo *ti, uint64
 	struct rnnbitfield **bitfields;
 	int bitfieldsnum;
 	char *tmp;
-	uint64_t mask;
+	uint64_t mask, value_orig;
 	if (!ti)
 		goto failhex;
-	if (ti->shr) value <<= ti->shr;
+	value_orig = value;
+	value = (value & typeinfo_mask(ti)) >> ti->low;
+	value <<= ti->shr;
 	switch (ti->type) {
 		case RNN_TTYPE_ENUM:
 			vals = ti->eenum->vals;
@@ -156,7 +159,7 @@ char *rnndec_decodeval(struct rnndeccontext *ctx, struct rnntypeinfo *ti, uint64
 			tmp = rnndec_decode_enum_val(ctx, vals, valsnum, value);
 			if (tmp) {
 				asprintf (&res, "%s%s%s", ctx->colors->eval, tmp, ctx->colors->reset);
-				return res;
+				break;
 			}
 			goto failhex;
 		case RNN_TTYPE_BITSET:
@@ -172,12 +175,10 @@ char *rnndec_decodeval(struct rnndeccontext *ctx, struct rnntypeinfo *ti, uint64
 			for (i = 0; i < bitfieldsnum; i++) {
 				if (!rnndec_varmatch(ctx, &bitfields[i]->varinfo))
 					continue;
-				uint64_t sval = (value & bitfields[i]->mask) >> bitfields[i]->low;
-				mask |= bitfields[i]->mask;
+				uint64_t type_mask = typeinfo_mask(&bitfields[i]->typeinfo);
+				mask |= type_mask;
 				if (bitfields[i]->typeinfo.type == RNN_TTYPE_BOOLEAN) {
-					if (sval == 0)
-						continue;
-					else if (sval == 1) {
+					if (value & type_mask) {
 						if (!res)
 							asprintf (&res, "%s%s%s", ctx->colors->mod, bitfields[i]->name, ctx->colors->reset);
 						else {
@@ -185,10 +186,10 @@ char *rnndec_decodeval(struct rnndeccontext *ctx, struct rnntypeinfo *ti, uint64
 							free(res);
 							res = tmp;
 						}
-						continue;
 					}
+					continue;
 				}
-				char *subval = rnndec_decodeval(ctx, &bitfields[i]->typeinfo, sval, bitfields[i]->high - bitfields[i]->low + 1);
+				char *subval = rnndec_decodeval(ctx, &bitfields[i]->typeinfo, value & type_mask);
 				if (!res)
 					asprintf (&res, "%s%s%s = %s", ctx->colors->rname, bitfields[i]->name, ctx->colors->reset, subval);
 				else {
@@ -213,42 +214,42 @@ char *rnndec_decodeval(struct rnndeccontext *ctx, struct rnntypeinfo *ti, uint64
 			free(res);
 			return tmp;
 		case RNN_TTYPE_SPECTYPE:
-			return rnndec_decodeval(ctx, &ti->spectype->typeinfo, value, width);
+			return rnndec_decodeval(ctx, &ti->spectype->typeinfo, value);
 		case RNN_TTYPE_HEX:
 			asprintf (&res, "%s%#"PRIx64"%s", ctx->colors->num, value, ctx->colors->reset);
-			return res;
+			break;
 		case RNN_TTYPE_FIXED:
 			if (value & UINT64_C(1) << (width-1)) {
 				asprintf (&res, "%s-%lf%s", ctx->colors->num,
 						((double)((UINT64_C(1) << width) - value)) / ((double)(1 << ti->radix)),
 						ctx->colors->reset);
-				return res;
+				break;
 			}
 			/* fallthrough */
 		case RNN_TTYPE_UFIXED:
 			asprintf (&res, "%s%lf%s", ctx->colors->num,
 					((double)value) / ((double)(1LL << ti->radix)),
 					ctx->colors->reset);
-			return res;
+			break;
 		case RNN_TTYPE_A3XX_REGID:
 			asprintf (&res, "%sr%"PRIu64".%c%s", ctx->colors->num, (value >> 2), "xyzw"[value & 0x3], ctx->colors->reset);
-			return res;
+			break;
 		case RNN_TTYPE_UINT:
 			asprintf (&res, "%s%"PRIu64"%s", ctx->colors->num, value, ctx->colors->reset);
-			return res;
+			break;
 		case RNN_TTYPE_INT:
 			if (value & UINT64_C(1) << (width-1))
 				asprintf (&res, "%s-%"PRIi64"%s", ctx->colors->num, (UINT64_C(1) << width) - value, ctx->colors->reset);
 			else
 				asprintf (&res, "%s%"PRIi64"%s", ctx->colors->num, value, ctx->colors->reset);
-			return res;
+			break;
 		case RNN_TTYPE_BOOLEAN:
 			if (value == 0) {
 				asprintf (&res, "%sFALSE%s", ctx->colors->eval, ctx->colors->reset);
-				return res;
+				break;
 			} else if (value == 1) {
 				asprintf (&res, "%sTRUE%s", ctx->colors->eval, ctx->colors->reset);
-				return res;
+				break;
 			}
 		case RNN_TTYPE_FLOAT: {
 			union { uint64_t i; float f; double d; } val;
@@ -265,14 +266,19 @@ char *rnndec_decodeval(struct rnndeccontext *ctx, struct rnntypeinfo *ti, uint64
 			else
 				goto failhex;
 
-			return res;
+			break;
 		}
 		failhex:
 		default:
 			asprintf (&res, "%s%#"PRIx64"%s", ctx->colors->num, value, ctx->colors->reset);
-			return res;
 			break;
 	}
+	if (value_orig & ~typeinfo_mask(ti)) {
+		asprintf (&tmp, "%s | %s%#"PRIx64"%s", res, ctx->colors->err, value_orig & ~typeinfo_mask(ti), ctx->colors->reset);
+		free(res);
+		res = tmp;
+	}
+	return res;
 }
 
 static char *appendidx (struct rnndeccontext *ctx, char *name, uint64_t idx, struct rnnenum *index) {

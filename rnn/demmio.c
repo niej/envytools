@@ -377,7 +377,7 @@ int main(int argc, char **argv) {
 						cc->crx1 = value & 0xff;
 					} else if (addr == 0x6013d5) {
 						struct rnndecaddrinfo *ai = rnndec_decodeaddr(cc->ctx, crdom, cc->crx0, line[0] == 'W');
-						char *decoded_val = rnndec_decodeval(cc->ctx, ai->typeinfo, value, ai->width);
+						char *decoded_val = rnndec_decodeval(cc->ctx, ai->typeinfo, value);
 						printf ("[%d] %lf CRTC0 %c     0x%02x       0x%02"PRIx64" %s %s %s\n", cci, timestamp, line[0], cc->crx0, value, ai->name, line[0]=='W'?"<=":"=>", decoded_val);
 						free(ai->name);
 						free(ai);
@@ -385,7 +385,7 @@ int main(int argc, char **argv) {
 						skip = 1;
 					} else if (addr == 0x6033d5) {
 						struct rnndecaddrinfo *ai = rnndec_decodeaddr(cc->ctx, crdom, cc->crx1, line[0] == 'W');
-						char *decoded_val = rnndec_decodeval(cc->ctx, ai->typeinfo, value, ai->width);
+						char *decoded_val = rnndec_decodeval(cc->ctx, ai->typeinfo, value);
 						printf ("[%d] %lf CRTC1 %c     0x%02x       0x%02"PRIx64" %s %s %s\n", cci, timestamp, line[0], cc->crx1, value, ai->name, line[0]=='W'?"<=":"=>", decoded_val);
 						free(ai->name);
 						free(ai);
@@ -462,7 +462,7 @@ int main(int argc, char **argv) {
 							int cnt;
 							for (b = 0; b < 4; b++) {
 								struct rnndecaddrinfo *ai = rnndec_decodeaddr(cc->ctx, mmiodom, addr+b, line[0] == 'W');
-								char *decoded_val = rnndec_decodeval(cc->ctx, ai->typeinfo, value >> b * 8 & 0xff, ai->width);
+								char *decoded_val = rnndec_decodeval(cc->ctx, ai->typeinfo, value >> b * 8 & 0xff);
 								if (b == 0) {
 									printf ("[%d] %lf MMIO%d %c 0x%06"PRIx64" 0x%08"PRIx64" %n%s %s %s\n", cci, timestamp, width, line[0], addr, value, &cnt, ai->name, line[0]=='W'?"<=":"=>", decoded_val);
 								} else {
@@ -476,7 +476,7 @@ int main(int argc, char **argv) {
 								free(decoded_val);
 							}
 						} else {
-							char *decoded_val = rnndec_decodeval(cc->ctx, ai->typeinfo, value, ai->width);
+							char *decoded_val = rnndec_decodeval(cc->ctx, ai->typeinfo, value);
 							printf ("[%d] %lf MMIO%d %c 0x%06"PRIx64" 0x%08"PRIx64" %s %s %s\n", cci, timestamp, width, line[0], addr, value, ai->name, line[0]=='W'?"<=":"=>", decoded_val);
 							free(ai->name);
 							free(ai);
