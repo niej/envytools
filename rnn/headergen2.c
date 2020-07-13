@@ -128,12 +128,12 @@ static void printvalue (struct rnnvalue *val, int shift) {
 static void printbitfield (struct rnnbitfield *bf, int shift);
 
 static void printtypeinfo (struct rnntypeinfo *ti, struct rnnbitfield *bf,
-		char *prefix, int shift, char *file) {
+		char *prefix, char *file) {
 	FILE *dst = findfout(file);
 	enum rnnttype intype = ti->type;
 	char *typename = NULL;
-	uint32_t mask = bf ? bf->mask : 0xffffffff;
-	uint32_t width = bf ? (1 + bf->high - bf->low) : 32;
+	uint32_t mask = typeinfo_mask(ti);
+	uint32_t width = 1 + ti->high - ti->low;
 
 	/* for fixed point, input type (arg to fxn) is float: */
 	if ((ti->type == RNN_TTYPE_FIXED) || (ti->type == RNN_TTYPE_UFIXED))
@@ -170,7 +170,7 @@ static void printtypeinfo (struct rnntypeinfo *ti, struct rnnbitfield *bf,
 
 	if (typename) {
 		printdef(prefix, "MASK", 0, mask, file);
-		printdef(prefix, "SHIFT", 1, shift, file);
+		printdef(prefix, "SHIFT", 1, ti->low, file);
 
 		fprintf(dst, "static inline uint32_t %s(%s val)\n", prefix, typename);
 		fprintf(dst, "{\n");
@@ -217,20 +217,17 @@ static void printtypeinfo (struct rnntypeinfo *ti, struct rnnbitfield *bf,
 			free(typename);
 	}
 
-	if (bf)
-		shift += bf->low;
-
 	int i;
 	for (i = 0; i < ti->valsnum; i++)
-		printvalue(ti->vals[i], shift);
+		printvalue(ti->vals[i], ti->low);
 	for (i = 0; i < ti->bitfieldsnum; i++)
-		printbitfield(ti->bitfields[i], shift);
+		printbitfield(ti->bitfields[i], ti->low);
 }
 
 static void printbitfield (struct rnnbitfield *bf, int shift) {
 	if (bf->varinfo.dead)
 		return;
-	printtypeinfo (&bf->typeinfo, bf, bf->fullname, bf->low, bf->file);
+	printtypeinfo (&bf->typeinfo, bf, bf->fullname, bf->file);
 }
 
 static void printdelem (struct rnndelem *elem, uint64_t offset) {
@@ -330,7 +327,7 @@ static void printdelem (struct rnndelem *elem, uint64_t offset) {
 		if (elem->length != 1)
 			printdef (elem->fullname, "LEN", 0, elem->length, elem->file);
 */
-		printtypeinfo (&elem->typeinfo, NULL, elem->fullname, 0, elem->file);
+		printtypeinfo (&elem->typeinfo, NULL, elem->fullname, elem->file);
 	}
 	fprintf (findfout(elem->file), "\n");
 	int j;

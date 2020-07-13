@@ -149,7 +149,7 @@ int main(int argc, char **argv) {
 		if (dom) {
 			struct rnndecaddrinfo *info = rnndec_decodeaddr(vc, dom, reg, 0);
 			if (info && info->typeinfo)
-				printf ("%s => %s\n", info->name, rnndec_decodeval(vc, info->typeinfo, val, info->width));
+				printf ("%s => %s\n", info->name, rnndec_decodeval(vc, info->typeinfo, val));
 			else if (info)
 				printf ("%s\n", info->name);
 			else

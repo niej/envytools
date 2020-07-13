@@ -189,6 +189,15 @@ static int trytypeattr (struct rnndb *db, char *file, xmlNode *node, xmlAttr *at
 		ti->radix = getnumattrib(db, file, node->line, attr);
 		ti->radixvalid = 1;
 		return 1;
+	} else if (!strcmp(attr->name, "pos")) {
+		ti->high = ti->low = getnumattrib(db, file, node->line, attr);
+		return 1;
+	} else if (!strcmp(attr->name, "low")) {
+		ti->low = getnumattrib(db, file, node->line, attr);
+		return 1;
+	} else if (!strcmp(attr->name, "high")) {
+		ti->high = getnumattrib(db, file, node->line, attr);
+		return 1;
 	}
 	return 0;
 }
@@ -345,19 +354,10 @@ static struct rnnbitfield *parsebitfield(struct rnndb *db, char *file, xmlNode *
 	struct rnnbitfield *bf = calloc(sizeof *bf, 1);
 	bf->file = file;
 	xmlAttr *attr = node->properties;
-	int highok = 0, lowok = 0;
+	bf->typeinfo.low = bf->typeinfo.high = -1;
 	while (attr) {
 		if (!strcmp(attr->name, "name")) {
 			bf->name = strdup(getattrib(db, file, node->line, attr));
-		} else if (!strcmp(attr->name, "high")) {
-			bf->high = getnumattrib(db, file, node->line, attr);
-			highok = 1;
-		} else if (!strcmp(attr->name, "low")) {
-			bf->low = getnumattrib(db, file, node->line, attr);
-			lowok = 1;
-		} else if (!strcmp(attr->name, "pos")) {
-			bf->high = bf->low = getnumattrib(db, file, node->line, attr);
-			lowok = highok = 1;
 		} else if (!strcmp(attr->name, "varset")) {
 			bf->varinfo.varsetstr = strdup(getattrib(db, file, node->line, attr));
 		} else if (!strcmp(attr->name, "variants")) {
@@ -381,7 +381,7 @@ static struct rnnbitfield *parsebitfield(struct rnndb *db, char *file, xmlNode *
 		fprintf (stderr, "%s:%d: nameless bitfield\n", file, node->line);
 		db->estatus = 1;
 		return 0;
-	} else if (!highok || !lowok || bf->high < bf->low) {
+	} else if (bf->typeinfo.low < 0|| bf->typeinfo.high < 0 || bf->typeinfo.high < bf->typeinfo.low) {
 		fprintf (stderr, "%s:%d: bitfield has wrong placement\n", file, node->line);
 		db->estatus = 1;
 		return 0;
@@ -583,6 +583,8 @@ static struct rnndelem *trydelem(struct rnndb *db, char *file, xmlNode *node) {
 	res->length = 1;
 	res->access = RNN_ACCESS_RW;
 	xmlAttr *attr = node->properties;
+	res->typeinfo.low = 0;
+	res->typeinfo.high = width - 1;
 	while (attr) {
 		if (!strcmp(attr->name, "name")) {
 			res->name = strdup(getattrib(db, file, node->line, attr));
@@ -936,6 +938,8 @@ static void copytypeinfo (struct rnntypeinfo *dst, struct rnntypeinfo *src, char
 	int i;
 	dst->name = src->name;
 	dst->shr = src->shr;
+	dst->low = src->low;
+	dst->high = src->high;
 	dst->min = src->min;
 	dst->max = src->max;
 	dst->align = src->align;
@@ -948,8 +952,6 @@ static void copytypeinfo (struct rnntypeinfo *dst, struct rnntypeinfo *src, char
 static struct rnnbitfield *copybitfield (struct rnnbitfield *bf, char *file) {
 	struct rnnbitfield *res = calloc (sizeof *res, 1);
 	res->name = bf->name;
-	res->low = bf->low;
-	res->high = bf->high;
 	res->varinfo = bf->varinfo;
 	res->file = file;
 	copytypeinfo(&res->typeinfo, &bf->typeinfo, file);
@@ -1116,7 +1118,7 @@ static void prepvalue(struct rnndb *db, struct rnnvalue *val, char *prefix, stru
 
 static void prepbitfield(struct rnndb *db, struct rnnbitfield *bf, char *prefix, struct rnnvarinfo *parvi);
 
-static void preptypeinfo(struct rnndb *db, struct rnntypeinfo *ti, char *prefix, struct rnnvarinfo *vi, int width, char *file) {
+static void preptypeinfo(struct rnndb *db, struct rnntypeinfo *ti, char *prefix, struct rnnvarinfo *vi, char *file) {
 	int i;
 	if (ti->name) {
 		struct rnnenum *en = rnn_findenum (db, ti->name);
@@ -1178,7 +1180,7 @@ static void preptypeinfo(struct rnndb *db, struct rnntypeinfo *ti, char *prefix,
 	} else if (ti->valsnum) {
 		ti->name = "enum";
 		ti->type = RNN_TTYPE_INLINE_ENUM;
-	} else if (width == 1) {
+	} else if (ti->low == 0 && ti->high == 0) {
 		ti->name = "boolean";
 		ti->type = RNN_TTYPE_BOOLEAN;
 	} else {
@@ -1196,11 +1198,7 @@ static void prepbitfield(struct rnndb *db, struct rnnbitfield *bf, char *prefix,
 	prepvarinfo (db, bf->fullname, &bf->varinfo, parvi);
 	if (bf->varinfo.dead)
 		return;
-	if (bf->high == 63)
-		bf->mask = - (1ULL<<bf->low);
-	else
-		bf->mask = (1ULL<<(bf->high+1)) - (1ULL<<bf->low);
-	preptypeinfo(db, &bf->typeinfo, bf->fullname, &bf->varinfo, bf->high - bf->low + 1, bf->file);
+	preptypeinfo(db, &bf->typeinfo, bf->fullname, &bf->varinfo, bf->file);
 	if (bf->varinfo.prefix)
 		bf->fullname = catstr(bf->varinfo.prefix, bf->fullname);
 }
@@ -1238,7 +1236,7 @@ static void prepdelem(struct rnndb *db, struct rnndelem *elem, char *prefix, str
 			elem->stride = elem->width/width;
 		}
 	}
-	preptypeinfo(db, &elem->typeinfo, elem->name?elem->fullname:prefix, &elem->varinfo, elem->width, elem->file);
+	preptypeinfo(db, &elem->typeinfo, elem->name?elem->fullname:prefix, &elem->varinfo, elem->file);
 
 	int i;
 	for (i = 0; i < elem->subelemsnum; i++)
@@ -1279,7 +1277,7 @@ static void prepbitset(struct rnndb *db, struct rnnbitset *bs) {
 }
 
 static void prepspectype(struct rnndb *db, struct rnnspectype *st) {
-	preptypeinfo(db, &st->typeinfo, st->name, 0, 32, st->file); // XXX doesn't exactly make sense...
+	preptypeinfo(db, &st->typeinfo, st->name, 0, st->file); // XXX doesn't exactly make sense...
 }
 
 void rnn_prepdb (struct rnndb *db) {

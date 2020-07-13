@@ -35,6 +35,7 @@
 #include <string.h>
 #include <sys/stat.h>
 #include <sys/wait.h>
+#include <assert.h>
 
 uint64_t *strides = 0;
 int stridesnum = 0;
@@ -114,6 +115,13 @@ void printvalue (struct rnnvalue *val, int shift) {
 void printbitfield (struct rnnbitfield *bf, int shift);
 
 void printtypeinfo (struct rnntypeinfo *ti, char *prefix, int shift, char *file) {
+	if (ti->type == RNN_TTYPE_BOOLEAN) {
+		assert(ti->low == ti->high);
+		printdef (prefix, 0, 0, 1 << (ti->low + shift), file);
+	} else {
+		printdef (prefix, "MASK", 0, typeinfo_mask(ti) << shift, file);
+		printdef (prefix, "SHIFT", 1, ti->low + shift, file);
+	}
 	if (ti->shr)
 		printdef (prefix, "SHR", 1, ti->shr, file);
 	if (ti->minvalid)
@@ -126,21 +134,15 @@ void printtypeinfo (struct rnntypeinfo *ti, char *prefix, int shift, char *file)
 		printdef (prefix, "RADIX", 0, ti->radix, file);
 	int i;
 	for (i = 0; i < ti->valsnum; i++)
-		printvalue(ti->vals[i], shift);
+		printvalue(ti->vals[i], ti->low + shift);
 	for (i = 0; i < ti->bitfieldsnum; i++)
-		printbitfield(ti->bitfields[i], shift);
+		printbitfield(ti->bitfields[i], ti->low + shift);
 }
 
 void printbitfield (struct rnnbitfield *bf, int shift) {
 	if (bf->varinfo.dead)
 		return;
-	if (bf->typeinfo.type == RNN_TTYPE_BOOLEAN) {
-		printdef (bf->fullname, 0, 0, bf->mask << shift, bf->file);
-	} else {
-		printdef (bf->fullname, "MASK", 0, bf->mask << shift, bf->file);
-		printdef (bf->fullname, "SHIFT", 1, bf->low + shift, bf->file);
-	}
-	printtypeinfo (&bf->typeinfo, bf->fullname, bf->low + shift, bf->file);
+	printtypeinfo (&bf->typeinfo, bf->fullname, shift, bf->file);
 }
 
 void printdelem (struct rnndelem *elem, uint64_t offset) {

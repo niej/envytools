@@ -817,7 +817,7 @@ dump_register_val(uint32_t regbase, uint32_t dword, int level)
 
 	if (info && info->typeinfo) {
 		uint64_t gpuaddr = 0;
-		char *decoded = rnndec_decodeval(rnn->vc, info->typeinfo, dword, info->width);
+		char *decoded = rnndec_decodeval(rnn->vc, info->typeinfo, dword);
 		printf("%s%s: %s", levels[level], info->name, decoded);
 
 		/* Try and figure out if we are looking at a gpuaddr.. this
@@ -919,7 +919,7 @@ dump_domain(uint32_t *dwords, uint32_t sizedwords, int level,
 		char *decoded;
 		if (!(info && info->typeinfo))
 			break;
-		decoded = rnndec_decodeval(rnn->vc, info->typeinfo, dwords[i], info->width);
+		decoded = rnndec_decodeval(rnn->vc, info->typeinfo, dwords[i]);
 		printf("%s%s\n", levels[level], decoded);
 		free(decoded);
 		free(info->name);
