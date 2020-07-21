@@ -175,7 +175,7 @@ xsi:schemaLocation="http://nouveau.freedesktop.org/ rules-ng.xsd">
 <bitset name="a6x_cp_protect" inline="yes">
 	<bitfield name="BASE_ADDR" low="0" high="17"/>
 	<bitfield name="MASK_LEN" low="18" high="30"/>
-	<bitfield name="READ" pos="31"/>
+	<bitfield name="READ" pos="31" type="boolean"/>
 </bitset>
 
 <enum name="a6xx_shader_id">
@@ -929,39 +929,39 @@ to upconvert to 32b float internally?
 
 <domain name="A6XX" width="32">
 	<bitset name="A6XX_RBBM_INT_0_MASK" inline="no">
-		<bitfield name="RBBM_GPU_IDLE" pos="0"/>
-		<bitfield name="CP_AHB_ERROR" pos="1"/>
-		<bitfield name="RBBM_ATB_ASYNCFIFO_OVERFLOW" pos="6"/>
-		<bitfield name="RBBM_GPC_ERROR" pos="7"/>
-		<bitfield name="CP_SW" pos="8"/>
-		<bitfield name="CP_HW_ERROR" pos="9"/>
-		<bitfield name="CP_CCU_FLUSH_DEPTH_TS" pos="10"/>
-		<bitfield name="CP_CCU_FLUSH_COLOR_TS" pos="11"/>
-		<bitfield name="CP_CCU_RESOLVE_TS" pos="12"/>
-		<bitfield name="CP_IB2" pos="13"/>
-		<bitfield name="CP_IB1" pos="14"/>
-		<bitfield name="CP_RB" pos="15"/>
-		<bitfield name="CP_RB_DONE_TS" pos="17"/>
-		<bitfield name="CP_WT_DONE_TS" pos="18"/>
-		<bitfield name="CP_CACHE_FLUSH_TS" pos="20"/>
-		<bitfield name="RBBM_ATB_BUS_OVERFLOW" pos="22"/>
-		<bitfield name="RBBM_HANG_DETECT" pos="23"/>
-		<bitfield name="UCHE_OOB_ACCESS" pos="24"/>
-		<bitfield name="UCHE_TRAP_INTR" pos="25"/>
-		<bitfield name="DEBBUS_INTR_0" pos="26"/>
-		<bitfield name="DEBBUS_INTR_1" pos="27"/>
-		<bitfield name="ISDB_CPU_IRQ" pos="30"/>
-		<bitfield name="ISDB_UNDER_DEBUG" pos="31"/>
+		<bitfield name="RBBM_GPU_IDLE" pos="0" type="boolean"/>
+		<bitfield name="CP_AHB_ERROR" pos="1" type="boolean"/>
+		<bitfield name="RBBM_ATB_ASYNCFIFO_OVERFLOW" pos="6" type="boolean"/>
+		<bitfield name="RBBM_GPC_ERROR" pos="7" type="boolean"/>
+		<bitfield name="CP_SW" pos="8" type="boolean"/>
+		<bitfield name="CP_HW_ERROR" pos="9" type="boolean"/>
+		<bitfield name="CP_CCU_FLUSH_DEPTH_TS" pos="10" type="boolean"/>
+		<bitfield name="CP_CCU_FLUSH_COLOR_TS" pos="11" type="boolean"/>
+		<bitfield name="CP_CCU_RESOLVE_TS" pos="12" type="boolean"/>
+		<bitfield name="CP_IB2" pos="13" type="boolean"/>
+		<bitfield name="CP_IB1" pos="14" type="boolean"/>
+		<bitfield name="CP_RB" pos="15" type="boolean"/>
+		<bitfield name="CP_RB_DONE_TS" pos="17" type="boolean"/>
+		<bitfield name="CP_WT_DONE_TS" pos="18" type="boolean"/>
+		<bitfield name="CP_CACHE_FLUSH_TS" pos="20" type="boolean"/>
+		<bitfield name="RBBM_ATB_BUS_OVERFLOW" pos="22" type="boolean"/>
+		<bitfield name="RBBM_HANG_DETECT" pos="23" type="boolean"/>
+		<bitfield name="UCHE_OOB_ACCESS" pos="24" type="boolean"/>
+		<bitfield name="UCHE_TRAP_INTR" pos="25" type="boolean"/>
+		<bitfield name="DEBBUS_INTR_0" pos="26" type="boolean"/>
+		<bitfield name="DEBBUS_INTR_1" pos="27" type="boolean"/>
+		<bitfield name="ISDB_CPU_IRQ" pos="30" type="boolean"/>
+		<bitfield name="ISDB_UNDER_DEBUG" pos="31" type="boolean"/>
 	</bitset>
 
 	<bitset name="A6XX_CP_INT">
-		<bitfield name="CP_OPCODE_ERROR" pos="0"/>
-		<bitfield name="CP_UCODE_ERROR" pos="1"/>
-		<bitfield name="CP_HW_FAULT_ERROR" pos="2"/>
-		<bitfield name="CP_REGISTER_PROTECTION_ERROR" pos="4"/>
-		<bitfield name="CP_AHB_ERROR" pos="5"/>
-		<bitfield name="CP_VSD_PARITY_ERROR" pos="6"/>
-		<bitfield name="CP_ILLEGAL_INSTR_ERROR" pos="7"/>
+		<bitfield name="CP_OPCODE_ERROR" pos="0" type="boolean"/>
+		<bitfield name="CP_UCODE_ERROR" pos="1" type="boolean"/>
+		<bitfield name="CP_HW_FAULT_ERROR" pos="2" type="boolean"/>
+		<bitfield name="CP_REGISTER_PROTECTION_ERROR" pos="4" type="boolean"/>
+		<bitfield name="CP_AHB_ERROR" pos="5" type="boolean"/>
+		<bitfield name="CP_VSD_PARITY_ERROR" pos="6" type="boolean"/>
+		<bitfield name="CP_ILLEGAL_INSTR_ERROR" pos="7" type="boolean"/>
 	</bitset>
 
 	<reg32 offset="0x0800" name="CP_RB_BASE"/>
@@ -1098,30 +1098,30 @@ to upconvert to 32b float internally?
 	<reg32 offset="0x0C01" name="VSC_ADDR_MODE_CNTL"/>
 	<reg32 offset="0x0201" name="RBBM_INT_0_STATUS" type="A6XX_RBBM_INT_0_MASK"/>
 	<reg32 offset="0x0210" name="RBBM_STATUS">
-		<bitfield high="23" low="23" name="GPU_BUSY_IGN_AHB" />
-		<bitfield high="22" low="22" name="GPU_BUSY_IGN_AHB_CP" />
-		<bitfield high="21" low="21" name="HLSQ_BUSY" />
-		<bitfield high="20" low="20" name="VSC_BUSY" />
-		<bitfield high="19" low="19" name="TPL1_BUSY" />
-		<bitfield high="18" low="18" name="SP_BUSY" />
-		<bitfield high="17" low="17" name="UCHE_BUSY" />
-		<bitfield high="16" low="16" name="VPC_BUSY" />
-		<bitfield high="15" low="15" name="VFD_BUSY" />
-		<bitfield high="14" low="14" name="TESS_BUSY" />
-		<bitfield high="13" low="13" name="PC_VSD_BUSY" />
-		<bitfield high="12" low="12" name="PC_DCALL_BUSY" />
-		<bitfield high="11" low="11" name="COM_DCOM_BUSY" />
-		<bitfield high="10" low="10" name="LRZ_BUSY" />
-		<bitfield high="9" low="9" name="A2D_BUSY" />
-		<bitfield high="8" low="8" name="CCU_BUSY" />
-		<bitfield high="7" low="7" name="RB_BUSY" />
-		<bitfield high="6" low="6" name="RAS_BUSY" />
-		<bitfield high="5" low="5" name="TSE_BUSY" />
-		<bitfield high="4" low="4" name="VBIF_BUSY" />
-		<bitfield high="3" low="3" name="GFX_DBGC_BUSY" />
-		<bitfield high="2" low="2" name="CP_BUSY" />
-		<bitfield high="1" low="1" name="CP_AHB_BUSY_CP_MASTER" />
-		<bitfield high="0" low="0" name="CP_AHB_BUSY_CX_MASTER"/>
+		<bitfield pos="23" name="GPU_BUSY_IGN_AHB" type="boolean"/>
+		<bitfield pos="22" name="GPU_BUSY_IGN_AHB_CP" type="boolean"/>
+		<bitfield pos="21" name="HLSQ_BUSY" type="boolean"/>
+		<bitfield pos="20" name="VSC_BUSY" type="boolean"/>
+		<bitfield pos="19" name="TPL1_BUSY" type="boolean"/>
+		<bitfield pos="18" name="SP_BUSY" type="boolean"/>
+		<bitfield pos="17" name="UCHE_BUSY" type="boolean"/>
+		<bitfield pos="16" name="VPC_BUSY" type="boolean"/>
+		<bitfield pos="15" name="VFD_BUSY" type="boolean"/>
+		<bitfield pos="14" name="TESS_BUSY" type="boolean"/>
+		<bitfield pos="13" name="PC_VSD_BUSY" type="boolean"/>
+		<bitfield pos="12" name="PC_DCALL_BUSY" type="boolean"/>
+		<bitfield pos="11" name="COM_DCOM_BUSY" type="boolean"/>
+		<bitfield pos="10" name="LRZ_BUSY" type="boolean"/>
+		<bitfield pos="9"  name="A2D_BUSY" type="boolean"/>
+		<bitfield pos="8"  name="CCU_BUSY" type="boolean"/>
+		<bitfield pos="7"  name="RB_BUSY" type="boolean"/>
+		<bitfield pos="6"  name="RAS_BUSY" type="boolean"/>
+		<bitfield pos="5"  name="TSE_BUSY" type="boolean"/>
+		<bitfield pos="4"  name="VBIF_BUSY" type="boolean"/>
+		<bitfield pos="3"  name="GFX_DBGC_BUSY" type="boolean"/>
+		<bitfield pos="2"  name="CP_BUSY" type="boolean"/>
+		<bitfield pos="1"  name="CP_AHB_BUSY_CP_MASTER" type="boolean"/>
+		<bitfield pos="0"  name="CP_AHB_BUSY_CX_MASTER" type="boolean"/>
 	</reg32>
 	<reg32 offset="0x0213" name="RBBM_STATUS3">
 		<bitfield pos="24" name="SMMU_STALLED_ON_FAULT" type="boolean"/>
@@ -1737,7 +1737,7 @@ to upconvert to 32b float internally?
 	<reg32 offset="0xB61B" name="TPL1_PERFCTR_TP_SEL_11"/>
 	<reg32 offset="0x3000" name="VBIF_VERSION"/>
 	<reg32 offset="0x3001" name="VBIF_CLKON">
-		<bitfield pos="1" name="FORCE_ON_TESTBUS"/>
+		<bitfield pos="1" name="FORCE_ON_TESTBUS" type="boolean"/>
 	</reg32>
 	<reg32 offset="0x302A" name="VBIF_GATE_OFF_WRREQ_EN"/>
 	<reg32 offset="0x3080" name="VBIF_XIN_HALT_CTRL0"/>
