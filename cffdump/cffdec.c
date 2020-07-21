@@ -423,7 +423,7 @@ disasm_gpuaddr(const char *name, uint64_t gpuaddr, int level)
 		uint32_t sizedwords = hostlen(gpuaddr) / 4;
 		const char *ext;
 
-		dump_hex(buf, 64, level+1);
+		dump_hex(buf, min(64, sizedwords), level+1);
 		disasm_a3xx(buf, sizedwords, level+2, stdout, options->gpu_id);
 
 		/* this is a bit ugly way, but oh well.. */
