@@ -1,0 +1,65 @@
+# This is the tag of the docker image used for the build jobs. If the
+# image doesn't exist yet, the containers stage generates it.
+#
+# In order to generate a new image, one should generally change the tag.
+# While removing the image from the registry would also work, that's not
+# recommended except for ephemeral images during development: Replacing
+# an image after a significant amount of time might pull in newer
+# versions of gcc/clang or other packages, which might break the build
+# with older commits using the same tag.
+#
+# After merging a change resulting in generating a new image to the
+# main repository, it's recommended to remove the image from the source
+# repository's container registry, so that the image from the main
+# repository's registry will be used there as well.
+variables:
+  UPSTREAM_REPO: freedreno/envytools
+  DEBIAN_TAG: "2019-11-16-rob-b"
+  DEBIAN_VERSION: buster-slim
+  DEBIAN_IMAGE: "$CI_REGISTRY_IMAGE/debian/$DEBIAN_VERSION:$DEBIAN_TAG"
+
+include:
+  - project: 'wayland/ci-templates'
+    ref: 0a9bdd33a98f05af6761ab118b5074952242aab0
+    file: '/templates/debian.yml'
+
+stages:
+  - containers
+  - build
+  - test
+
+# When & how to run the CI
+.ci-run-policy:
+  except:
+    - schedules
+  retry:
+    max: 2
+    when:
+      - runner_system_failure
+
+# CONTAINERS
+
+debian:
+  stage: containers
+  extends:
+    - .ci-run-policy
+    - .debian@container-ifnot-exists
+  variables:
+    GIT_STRATEGY: none # no need to pull the whole tree for rebuilding the image
+    DEBIAN_EXEC: 'bash .gitlab-ci/debian-install.sh'
+
+
+# BUILD
+
+build:
+  stage: build
+  extends:
+    - .ci-run-policy
+  image: $DEBIAN_IMAGE
+  needs:
+    - debian
+  script:
+    - cmake .
+    - make -j4
+    - ./.gitlab-ci/genoutput.sh
+    - diff -r .gitlab-ci/reference .gitlab-ci/out
