@@ -1203,7 +1203,7 @@ t7		opcode: CP_EVENT_WRITE (46) (5 dwords)
 			{ EVENT = CACHE_FLUSH_AND_INV_EVENT }
 			{ ADDR_0_LO = 0x1d90000 }
 			{ ADDR_0_HI = 0 }
-			0x1
+			{ 3 = 0x1 }
 		event (null)
 0000000001d91508:		0000: 70460004 00000016 01d90000 00000000 00000001
 t7		opcode: CP_WAIT_REG_MEM (3c) (7 dwords)
@@ -1218,7 +1218,7 @@ t7		opcode: CP_EVENT_WRITE (46) (5 dwords)
 			{ EVENT = CACHE_FLUSH_TS }
 			{ ADDR_0_LO = 0x1d90000 }
 			{ ADDR_0_HI = 0 }
-			0x2
+			{ 3 = 0x2 }
 		event CACHE_FLUSH_TS
 0000000001d91538:		0000: 70460004 00000004 01d90000 00000000 00000002
 t7		opcode: CP_WAIT_MEM_GTE (14) (5 dwords)
