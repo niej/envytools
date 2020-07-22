@@ -39,6 +39,7 @@ filter() {
 # dump only a single frame, and single tile pass, to keep the
 # reference output size managable
 $cffdump --frame 0 --once $traces/fd-clouds.rd.gz | filter $output/fd-clouds.log
+$cffdump --frame 0 --once $traces/es2gears-a320.rd.gz | filter $output/es2gears-a320.log
 
 # test a lua script to ensure we don't break scripting API:
 $cffdump --script `dirname $cffdump`/scripts/parse-submits.lua $traces/shadow.rd.gz | filter $output/shadow.log
