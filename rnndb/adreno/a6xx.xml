@@ -2889,8 +2889,8 @@ to upconvert to 32b float internally?
 		<bitfield name="VSC_SIZE" low="16" high="21" type="uint"/>
 		<bitfield name="VSC_N" low="22" high="26" type="uint"/>
 	</reg32>
-	<reg32 offset="0x9e12" name="PC_BIN_DATA_ADDR2" type="waddress" align="32"/>
-	<reg32 offset="0x9e14" name="PC_BIN_DATA_ADDR" type="waddress" align="32"/>
+	<reg64 offset="0x9e12" name="PC_BIN_PRIM_STRM" type="waddress" align="32"/>
+	<reg64 offset="0x9e14" name="PC_BIN_DRAW_STRM" type="waddress" align="32"/>
 
 	<reg32 offset="0x9e34" name="PC_PERFCTR_PC_SEL_0"/>
 	<reg32 offset="0x9e35" name="PC_PERFCTR_PC_SEL_1"/>
