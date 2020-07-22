@@ -361,8 +361,8 @@ function draw(primtype, nindx)
 	for n = 0,r.RB_FS_OUTPUT_CNTL1.MRT-1 do
 		if render_components[n] ~= 0 then
 			push_mrt(r.RB_MRT[n].BUF_INFO.COLOR_FORMAT,
-				r.GRAS_SC_SCREEN_SCISSOR_BR_0.X + 1,
-				r.GRAS_SC_SCREEN_SCISSOR_BR_0.Y + 1,
+				r.GRAS_SC_SCREEN_SCISSOR[0].BR.X + 1,
+				r.GRAS_SC_SCREEN_SCISSOR[0].BR.Y + 1,
 				r.RB_MSAA_CNTL.SAMPLES,
 				r.RB_MRT[n].BASE_LO | (r.RB_MRT[n].BASE_HI << 32),
 				r.RB_MRT_FLAG_BUFFER[n].ADDR_LO | (r.RB_MRT_FLAG_BUFFER[n].ADDR_HI << 32),
@@ -375,8 +375,8 @@ function draw(primtype, nindx)
 
 	if depthbase ~= 0 then
 		push_mrt(r.RB_DEPTH_BUFFER_INFO.DEPTH_FORMAT,
-			r.GRAS_SC_SCREEN_SCISSOR_BR_0.X + 1,
-			r.GRAS_SC_SCREEN_SCISSOR_BR_0.Y + 1,
+			r.GRAS_SC_SCREEN_SCISSOR[0].BR.X + 1,
+			r.GRAS_SC_SCREEN_SCISSOR[0].BR.Y + 1,
 			r.RB_MSAA_CNTL.SAMPLES,
 			depthbase,
 			r.RB_DEPTH_FLAG_BUFFER_BASE_LO | (r.RB_DEPTH_FLAG_BUFFER_BASE_HI << 32),
