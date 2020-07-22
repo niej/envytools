@@ -814,48 +814,48 @@ xsi:schemaLocation="http://nouveau.freedesktop.org/ rules-ng.xsd">
 
 <domain name="A5XX" width="32">
 	<bitset name="A5XX_INT0">
-		<bitfield name="RBBM_GPU_IDLE" pos="0"/>
-		<bitfield name="RBBM_AHB_ERROR" pos="1"/>
-		<bitfield name="RBBM_TRANSFER_TIMEOUT" pos="2"/>
-		<bitfield name="RBBM_ME_MS_TIMEOUT" pos="3"/>
-		<bitfield name="RBBM_PFP_MS_TIMEOUT" pos="4"/>
-		<bitfield name="RBBM_ETS_MS_TIMEOUT" pos="5"/>
-		<bitfield name="RBBM_ATB_ASYNC_OVERFLOW" pos="6"/>
-		<bitfield name="RBBM_GPC_ERROR" pos="7"/>
-		<bitfield name="CP_SW" pos="8"/>
-		<bitfield name="CP_HW_ERROR" pos="9"/>
-		<bitfield name="CP_CCU_FLUSH_DEPTH_TS" pos="10"/>
-		<bitfield name="CP_CCU_FLUSH_COLOR_TS" pos="11"/>
-		<bitfield name="CP_CCU_RESOLVE_TS" pos="12"/>
-		<bitfield name="CP_IB2" pos="13"/>
-		<bitfield name="CP_IB1" pos="14"/>
-		<bitfield name="CP_RB" pos="15"/>
-		<bitfield name="CP_UNUSED_1" pos="16"/>
-		<bitfield name="CP_RB_DONE_TS" pos="17"/>
-		<bitfield name="CP_WT_DONE_TS" pos="18"/>
-		<bitfield name="UNKNOWN_1" pos="19"/>
-		<bitfield name="CP_CACHE_FLUSH_TS" pos="20"/>
-		<bitfield name="UNUSED_2" pos="21"/>
-		<bitfield name="RBBM_ATB_BUS_OVERFLOW" pos="22"/>
-		<bitfield name="MISC_HANG_DETECT" pos="23"/>
-		<bitfield name="UCHE_OOB_ACCESS" pos="24"/>
-		<bitfield name="UCHE_TRAP_INTR" pos="25"/>
-		<bitfield name="DEBBUS_INTR_0" pos="26"/>
-		<bitfield name="DEBBUS_INTR_1" pos="27"/>
-		<bitfield name="GPMU_VOLTAGE_DROOP" pos="28"/>
-		<bitfield name="GPMU_FIRMWARE" pos="29"/>
-		<bitfield name="ISDB_CPU_IRQ" pos="30"/>
-		<bitfield name="ISDB_UNDER_DEBUG" pos="31"/>
+		<bitfield name="RBBM_GPU_IDLE" pos="0" type="boolean"/>
+		<bitfield name="RBBM_AHB_ERROR" pos="1" type="boolean"/>
+		<bitfield name="RBBM_TRANSFER_TIMEOUT" pos="2" type="boolean"/>
+		<bitfield name="RBBM_ME_MS_TIMEOUT" pos="3" type="boolean"/>
+		<bitfield name="RBBM_PFP_MS_TIMEOUT" pos="4" type="boolean"/>
+		<bitfield name="RBBM_ETS_MS_TIMEOUT" pos="5" type="boolean"/>
+		<bitfield name="RBBM_ATB_ASYNC_OVERFLOW" pos="6" type="boolean"/>
+		<bitfield name="RBBM_GPC_ERROR" pos="7" type="boolean"/>
+		<bitfield name="CP_SW" pos="8" type="boolean"/>
+		<bitfield name="CP_HW_ERROR" pos="9" type="boolean"/>
+		<bitfield name="CP_CCU_FLUSH_DEPTH_TS" pos="10" type="boolean"/>
+		<bitfield name="CP_CCU_FLUSH_COLOR_TS" pos="11" type="boolean"/>
+		<bitfield name="CP_CCU_RESOLVE_TS" pos="12" type="boolean"/>
+		<bitfield name="CP_IB2" pos="13" type="boolean"/>
+		<bitfield name="CP_IB1" pos="14" type="boolean"/>
+		<bitfield name="CP_RB" pos="15" type="boolean"/>
+		<bitfield name="CP_UNUSED_1" pos="16" type="boolean"/>
+		<bitfield name="CP_RB_DONE_TS" pos="17" type="boolean"/>
+		<bitfield name="CP_WT_DONE_TS" pos="18" type="boolean"/>
+		<bitfield name="UNKNOWN_1" pos="19" type="boolean"/>
+		<bitfield name="CP_CACHE_FLUSH_TS" pos="20" type="boolean"/>
+		<bitfield name="UNUSED_2" pos="21" type="boolean"/>
+		<bitfield name="RBBM_ATB_BUS_OVERFLOW" pos="22" type="boolean"/>
+		<bitfield name="MISC_HANG_DETECT" pos="23" type="boolean"/>
+		<bitfield name="UCHE_OOB_ACCESS" pos="24" type="boolean"/>
+		<bitfield name="UCHE_TRAP_INTR" pos="25" type="boolean"/>
+		<bitfield name="DEBBUS_INTR_0" pos="26" type="boolean"/>
+		<bitfield name="DEBBUS_INTR_1" pos="27" type="boolean"/>
+		<bitfield name="GPMU_VOLTAGE_DROOP" pos="28" type="boolean"/>
+		<bitfield name="GPMU_FIRMWARE" pos="29" type="boolean"/>
+		<bitfield name="ISDB_CPU_IRQ" pos="30" type="boolean"/>
+		<bitfield name="ISDB_UNDER_DEBUG" pos="31" type="boolean"/>
 	</bitset>
 
 	<!-- CP Interrupt bits -->
 	<bitset name="A5XX_CP_INT">
-		<bitfield name="CP_OPCODE_ERROR" pos="0"/>
-		<bitfield name="CP_RESERVED_BIT_ERROR" pos="1"/>
-		<bitfield name="CP_HW_FAULT_ERROR" pos="2"/>
-		<bitfield name="CP_DMA_ERROR" pos="3"/>
-		<bitfield name="CP_REGISTER_PROTECTION_ERROR" pos="4"/>
-		<bitfield name="CP_AHB_ERROR" pos="5"/>
+		<bitfield name="CP_OPCODE_ERROR" pos="0" type="boolean"/>
+		<bitfield name="CP_RESERVED_BIT_ERROR" pos="1" type="boolean"/>
+		<bitfield name="CP_HW_FAULT_ERROR" pos="2" type="boolean"/>
+		<bitfield name="CP_DMA_ERROR" pos="3" type="boolean"/>
+		<bitfield name="CP_REGISTER_PROTECTION_ERROR" pos="4" type="boolean"/>
+		<bitfield name="CP_AHB_ERROR" pos="5" type="boolean"/>
 	</bitset>
 
 	<!-- CP registers -->
@@ -984,35 +984,35 @@ xsi:schemaLocation="http://nouveau.freedesktop.org/ rules-ng.xsd">
 	<reg32 offset="0x002f" name="RBBM_INTERFACE_HANG_INT_CNTL"/>
 	<reg32 offset="0x0037" name="RBBM_INT_CLEAR_CMD"/>
 	<reg32 offset="0x0038" name="RBBM_INT_0_MASK">
-		<bitfield name="RBBM_GPU_IDLE" pos="0"/>
-		<bitfield name="RBBM_AHB_ERROR" pos="1"/>
-		<bitfield name="RBBM_TRANSFER_TIMEOUT" pos="2"/>
-		<bitfield name="RBBM_ME_MS_TIMEOUT" pos="3"/>
-		<bitfield name="RBBM_PFP_MS_TIMEOUT" pos="4"/>
-		<bitfield name="RBBM_ETS_MS_TIMEOUT" pos="5"/>
-		<bitfield name="RBBM_ATB_ASYNC_OVERFLOW" pos="6"/>
-		<bitfield name="RBBM_GPC_ERROR" pos="7"/>
-		<bitfield name="CP_SW" pos="8"/>
-		<bitfield name="CP_HW_ERROR" pos="9"/>
-		<bitfield name="CP_CCU_FLUSH_DEPTH_TS" pos="10"/>
-		<bitfield name="CP_CCU_FLUSH_COLOR_TS" pos="11"/>
-		<bitfield name="CP_CCU_RESOLVE_TS" pos="12"/>
-		<bitfield name="CP_IB2" pos="13"/>
-		<bitfield name="CP_IB1" pos="14"/>
-		<bitfield name="CP_RB" pos="15"/>
-		<bitfield name="CP_RB_DONE_TS" pos="17"/>
-		<bitfield name="CP_WT_DONE_TS" pos="18"/>
-		<bitfield name="CP_CACHE_FLUSH_TS" pos="20"/>
-		<bitfield name="RBBM_ATB_BUS_OVERFLOW" pos="22"/>
-		<bitfield name="MISC_HANG_DETECT" pos="23"/>
-		<bitfield name="UCHE_OOB_ACCESS" pos="24"/>
-		<bitfield name="UCHE_TRAP_INTR" pos="25"/>
-		<bitfield name="DEBBUS_INTR_0" pos="26"/>
-		<bitfield name="DEBBUS_INTR_1" pos="27"/>
-		<bitfield name="GPMU_VOLTAGE_DROOP" pos="28"/>
-		<bitfield name="GPMU_FIRMWARE" pos="29"/>
-		<bitfield name="ISDB_CPU_IRQ" pos="30"/>
-		<bitfield name="ISDB_UNDER_DEBUG" pos="31"/>
+		<bitfield name="RBBM_GPU_IDLE" pos="0" type="boolean"/>
+		<bitfield name="RBBM_AHB_ERROR" pos="1" type="boolean"/>
+		<bitfield name="RBBM_TRANSFER_TIMEOUT" pos="2" type="boolean"/>
+		<bitfield name="RBBM_ME_MS_TIMEOUT" pos="3" type="boolean"/>
+		<bitfield name="RBBM_PFP_MS_TIMEOUT" pos="4" type="boolean"/>
+		<bitfield name="RBBM_ETS_MS_TIMEOUT" pos="5" type="boolean"/>
+		<bitfield name="RBBM_ATB_ASYNC_OVERFLOW" pos="6" type="boolean"/>
+		<bitfield name="RBBM_GPC_ERROR" pos="7" type="boolean"/>
+		<bitfield name="CP_SW" pos="8" type="boolean"/>
+		<bitfield name="CP_HW_ERROR" pos="9" type="boolean"/>
+		<bitfield name="CP_CCU_FLUSH_DEPTH_TS" pos="10" type="boolean"/>
+		<bitfield name="CP_CCU_FLUSH_COLOR_TS" pos="11" type="boolean"/>
+		<bitfield name="CP_CCU_RESOLVE_TS" pos="12" type="boolean"/>
+		<bitfield name="CP_IB2" pos="13" type="boolean"/>
+		<bitfield name="CP_IB1" pos="14" type="boolean"/>
+		<bitfield name="CP_RB" pos="15" type="boolean"/>
+		<bitfield name="CP_RB_DONE_TS" pos="17" type="boolean"/>
+		<bitfield name="CP_WT_DONE_TS" pos="18" type="boolean"/>
+		<bitfield name="CP_CACHE_FLUSH_TS" pos="20" type="boolean"/>
+		<bitfield name="RBBM_ATB_BUS_OVERFLOW" pos="22" type="boolean"/>
+		<bitfield name="MISC_HANG_DETECT" pos="23" type="boolean"/>
+		<bitfield name="UCHE_OOB_ACCESS" pos="24" type="boolean"/>
+		<bitfield name="UCHE_TRAP_INTR" pos="25" type="boolean"/>
+		<bitfield name="DEBBUS_INTR_0" pos="26" type="boolean"/>
+		<bitfield name="DEBBUS_INTR_1" pos="27" type="boolean"/>
+		<bitfield name="GPMU_VOLTAGE_DROOP" pos="28" type="boolean"/>
+		<bitfield name="GPMU_FIRMWARE" pos="29" type="boolean"/>
+		<bitfield name="ISDB_CPU_IRQ" pos="30" type="boolean"/>
+		<bitfield name="ISDB_UNDER_DEBUG" pos="31" type="boolean"/>
 	</reg32>
 	<reg32 offset="0x003f" name="RBBM_AHB_DBG_CNTL"/>
 	<reg32 offset="0x0041" name="RBBM_EXT_VBIF_DBG_CNTL"/>
