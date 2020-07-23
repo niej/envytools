@@ -144,13 +144,13 @@ const char *rnn_enumname(struct rnn *rnn, const char *name, uint32_t val)
 	struct rnnenum *en = rnn_findenum(ctx->db, name);
 	if (en) {
 		int i;
-		for (i = 0; i < en->valsnum; i++)
-			if (en->vals[i]->valvalid && en->vals[i]->value == val) {
-				const char *variant = en->vals[i]->varinfo.variantsstr;
-				if (variant && !strstr(variant, rnn->variant))
-					continue;
+		for (i = 0; i < en->valsnum; i++) {
+			struct rnnvalue *eval = en->vals[i];
+			if (eval->valvalid && eval->value == val &&
+					rnndec_varmatch(ctx, &eval->varinfo)) {
 				return en->vals[i]->name;
 			}
+		}
 	}
 	return NULL;
 }
