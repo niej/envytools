@@ -1545,6 +1545,11 @@ to upconvert to 32b float internally?
 	<reg32 offset="0x0011a" name="RBBM_CLOCK_HYST_GMU_GX"/>
 	<reg32 offset="0x0011b" name="RBBM_CLOCK_MODE_HLSQ"/>
 	<reg32 offset="0x0011c" name="RBBM_CLOCK_DELAY_HLSQ"/>
+	<reg32 offset="0x0011d" name="RBBM_CLOCK_HYST_HLSQ"/>
+	<reg32 offset="0x00120" name="RBBM_CLOCK_CNTL_TEX_FCHE"/>
+	<reg32 offset="0x00121" name="RBBM_CLOCK_DELAY_TEX_FCHE"/>
+	<reg32 offset="0x00122" name="RBBM_CLOCK_HYST_TEX_FCHE"/>
+
 	<reg32 offset="0x0600" name="DBGC_CFG_DBGBUS_SEL_A"/>
 	<reg32 offset="0x0601" name="DBGC_CFG_DBGBUS_SEL_B"/>
 	<reg32 offset="0x0602" name="DBGC_CFG_DBGBUS_SEL_C"/>
