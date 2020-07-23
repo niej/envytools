@@ -1016,7 +1016,7 @@ to upconvert to 32b float internally?
 	</reg32>
 	<reg32 offset="0x08C3" name="CP_MEM_POOL_SIZE"/>
 	<reg32 offset="0x0841" name="CP_CHICKEN_DBG"/>
-	<reg32 offset="0x0842" name="CP_ADDR_MODE_CNTL"/>
+	<reg32 offset="0x0842" name="CP_ADDR_MODE_CNTL" type="a5xx_address_mode"/>
 	<reg32 offset="0x0843" name="CP_DBG_ECO_CNTL"/>
 	<reg32 offset="0x084F" name="CP_PROTECT_CNTL"/>
 
@@ -1095,7 +1095,7 @@ to upconvert to 32b float internally?
 	<reg32 offset="0x098D" name="CP_AHB_CNTL"/>
 	<reg32 offset="0x0A00" name="CP_APERTURE_CNTL_HOST"/>
 	<reg32 offset="0x0A03" name="CP_APERTURE_CNTL_CD"/>
-	<reg32 offset="0x0C01" name="VSC_ADDR_MODE_CNTL"/>
+	<reg32 offset="0x0C01" name="VSC_ADDR_MODE_CNTL" type="a5xx_address_mode"/>
 	<reg32 offset="0x0201" name="RBBM_INT_0_STATUS" type="A6XX_RBBM_INT_0_MASK"/>
 	<reg32 offset="0x0210" name="RBBM_STATUS">
 		<bitfield pos="23" name="GPU_BUSY_IGN_AHB" type="boolean"/>
@@ -1425,7 +1425,7 @@ to upconvert to 32b float internally?
 	<reg32 offset="0xF801" name="RBBM_SECVID_TSB_TRUSTED_BASE_HI"/>
 	<reg32 offset="0xF802" name="RBBM_SECVID_TSB_TRUSTED_SIZE"/>
 	<reg32 offset="0xF803" name="RBBM_SECVID_TSB_CNTL"/>
-	<reg32 offset="0xF810" name="RBBM_SECVID_TSB_ADDR_MODE_CNTL"/>
+	<reg32 offset="0xF810" name="RBBM_SECVID_TSB_ADDR_MODE_CNTL" type="a5xx_address_mode"/>
 	<reg32 offset="0x00010" name="RBBM_VBIF_CLIENT_QOS_CNTL"/>
 	<reg32 offset="0x00011" name="RBBM_GBIF_CLIENT_QOS_CNTL"/>
 	<reg32 offset="0x0001c" name="RBBM_WAIT_FOR_GPU_IDLE_CMD">
@@ -1597,7 +1597,7 @@ to upconvert to 32b float internally?
 	<reg32 offset="0x0630" name="DBGC_CFG_DBGBUS_TRACE_BUF2"/>
 	<reg32 offset="0x0CD8" name="VSC_PERFCTR_VSC_SEL_0"/>
 	<reg32 offset="0x0CD9" name="VSC_PERFCTR_VSC_SEL_1"/>
-	<reg32 offset="0xBE05" name="HLSQ_ADDR_MODE_CNTL"/>
+	<reg32 offset="0xBE05" name="HLSQ_ADDR_MODE_CNTL" type="a5xx_address_mode"/>
 	<reg32 offset="0xBE10" name="HLSQ_PERFCTR_HLSQ_SEL_0"/>
 	<reg32 offset="0xBE11" name="HLSQ_PERFCTR_HLSQ_SEL_1"/>
 	<reg32 offset="0xBE12" name="HLSQ_PERFCTR_HLSQ_SEL_2"/>
@@ -1606,7 +1606,7 @@ to upconvert to 32b float internally?
 	<reg32 offset="0xBE15" name="HLSQ_PERFCTR_HLSQ_SEL_5"/>
 	<reg32 offset="0xC800" name="HLSQ_DBG_AHB_READ_APERTURE"/>
 	<reg32 offset="0xD000" name="HLSQ_DBG_READ_SEL"/>
-	<reg32 offset="0xA601" name="VFD_ADDR_MODE_CNTL"/>
+	<reg32 offset="0xA601" name="VFD_ADDR_MODE_CNTL" type="a5xx_address_mode"/>
 	<reg32 offset="0xA610" name="VFD_PERFCTR_VFD_SEL_0"/>
 	<reg32 offset="0xA611" name="VFD_PERFCTR_VFD_SEL_1"/>
 	<reg32 offset="0xA612" name="VFD_PERFCTR_VFD_SEL_2"/>
@@ -1615,7 +1615,7 @@ to upconvert to 32b float internally?
 	<reg32 offset="0xA615" name="VFD_PERFCTR_VFD_SEL_5"/>
 	<reg32 offset="0xA616" name="VFD_PERFCTR_VFD_SEL_6"/>
 	<reg32 offset="0xA617" name="VFD_PERFCTR_VFD_SEL_7"/>
-	<reg32 offset="0x0E00" name="UCHE_ADDR_MODE_CNTL"/>
+	<reg32 offset="0x0E00" name="UCHE_ADDR_MODE_CNTL" type="a5xx_address_mode"/>
 	<reg32 offset="0x0E01" name="UCHE_MODE_CNTL"/>
 	<reg32 offset="0x0E05" name="UCHE_WRITE_RANGE_MAX_LO"/>
 	<reg32 offset="0x0E06" name="UCHE_WRITE_RANGE_MAX_HI"/>
@@ -1644,7 +1644,7 @@ to upconvert to 32b float internally?
 	<reg32 offset="0x0E25" name="UCHE_PERFCTR_UCHE_SEL_9"/>
 	<reg32 offset="0x0E26" name="UCHE_PERFCTR_UCHE_SEL_10"/>
 	<reg32 offset="0x0E27" name="UCHE_PERFCTR_UCHE_SEL_11"/>
-	<reg32 offset="0xAE01" name="SP_ADDR_MODE_CNTL"/>
+	<reg32 offset="0xAE01" name="SP_ADDR_MODE_CNTL" type="a5xx_address_mode"/>
 	<reg32 offset="0xAE02" name="SP_NC_MODE_CNTL"/>
 	<reg32 offset="0xAE10" name="SP_PERFCTR_SP_SEL_0"/>
 	<reg32 offset="0xAE11" name="SP_PERFCTR_SP_SEL_1"/>
@@ -1670,7 +1670,7 @@ to upconvert to 32b float internally?
 	<reg32 offset="0xAE25" name="SP_PERFCTR_SP_SEL_21"/>
 	<reg32 offset="0xAE26" name="SP_PERFCTR_SP_SEL_22"/>
 	<reg32 offset="0xAE27" name="SP_PERFCTR_SP_SEL_23"/>
-	<reg32 offset="0xB601" name="TPL1_ADDR_MODE_CNTL"/>
+	<reg32 offset="0xB601" name="TPL1_ADDR_MODE_CNTL" type="a5xx_address_mode"/>
 	<reg32 offset="0xB604" name="TPL1_NC_MODE_CNTL"/>
 	<reg32 offset="0xB608" name="TPL1_BICUBIC_WEIGHTS_TABLE_0"/>
 	<reg32 offset="0xB609" name="TPL1_BICUBIC_WEIGHTS_TABLE_1"/>
@@ -2121,7 +2121,7 @@ to upconvert to 32b float internally?
 
 	<!-- always 0x880 ? (and 0 in a640/a650 traces?) -->
 	<reg32 offset="0x8600" name="GRAS_UNKNOWN_8600" low="0" high="12" />
-	<reg32 offset="0x8601" name="GRAS_ADDR_MODE_CNTL" pos="0" type="boolean"/>
+	<reg32 offset="0x8601" name="GRAS_ADDR_MODE_CNTL" pos="0" type="a5xx_address_mode"/>
 	<reg32 offset="0x8610" name="GRAS_PERFCTR_TSE_SEL_0"/>
 	<reg32 offset="0x8611" name="GRAS_PERFCTR_TSE_SEL_1"/>
 	<reg32 offset="0x8612" name="GRAS_PERFCTR_TSE_SEL_2"/>
@@ -2565,7 +2565,7 @@ to upconvert to 32b float internally?
 	<reg32 offset="0x8e01" name="RB_UNKNOWN_8E01"/>
 	<!-- 0x8e00-0x8e03 invalid -->
 	<reg32 offset="0x8e04" name="RB_UNKNOWN_8E04"/> <!-- TODO: valid mask 0xfffffeff -->
-	<reg32 offset="0x8e05" name="RB_ADDR_MODE_CNTL" pos="0" type="boolean"/>
+	<reg32 offset="0x8e05" name="RB_ADDR_MODE_CNTL" pos="0" type="a5xx_address_mode"/>
 	<!-- 0x8e06 invalid -->
 	<reg32 offset="0x8e07" name="RB_CCU_CNTL">
 		<!-- offset into GMEM for something.
@@ -2749,7 +2749,7 @@ to upconvert to 32b float internally?
 
 	<!-- TODO: 0x9600-0x97ff range -->
 	<reg32 offset="0x9600" name="VPC_UNKNOWN_9600"/> <!-- always 0x0 ? TODO: 0x1fbf37ff valid mask -->
-	<reg32 offset="0x9601" name="VPC_ADDR_MODE_CNTL" pos="0" type="boolean"/>
+	<reg32 offset="0x9601" name="VPC_ADDR_MODE_CNTL" pos="0" type="a5xx_address_mode"/>
 	<reg32 offset="0x9602" name="VPC_UNKNOWN_9602" pos="0"/> <!-- always 0x0 ? -->
 	<reg32 offset="0x9603" name="VPC_UNKNOWN_9603" low="0" high="26"/>
 	<reg32 offset="0x9604" name="VPC_PERFCTR_VPC_SEL_0"/>
@@ -2878,7 +2878,7 @@ to upconvert to 32b float internally?
 	<!-- 0x9c01-0x9dff invalid -->
 	<!-- TODO: 0x9e00-0xa000 range incomplete -->
 	<reg32 offset="0x9e00" name="PC_DBG_ECO_CNTL"/>
-	<reg32 offset="0x9e01" name="PC_ADDR_MODE_CNTL"/>
+	<reg32 offset="0x9e01" name="PC_ADDR_MODE_CNTL" type="a5xx_address_mode"/>
 	<reg32 offset="0x9e08" name="PC_TESSFACTOR_ADDR_LO"/>
 	<reg32 offset="0x9e09" name="PC_TESSFACTOR_ADDR_HI"/>
 	<reg32 offset="0x9e08" name="PC_TESSFACTOR_ADDR" type="waddress" align="32"/>
