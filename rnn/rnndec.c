@@ -150,6 +150,15 @@ char *rnndec_decode_enum(struct rnndeccontext *ctx, const char *enumname, uint64
 	return NULL;
 }
 
+/* The name UNK%u is used as a placeholder for bitfields that exist but
+ * have an unknown function.
+ */
+static int is_unknown(const char *name)
+{
+	unsigned u;
+	return sscanf(name, "UNK%u", &u) == 1;
+}
+
 char *rnndec_decodeval(struct rnndeccontext *ctx, struct rnntypeinfo *ti, uint64_t value) {
 	int width = ti->high - ti->low + 1;
 	char *res = 0;
@@ -165,6 +174,7 @@ char *rnndec_decodeval(struct rnndeccontext *ctx, struct rnntypeinfo *ti, uint64
 	value_orig = value;
 	value = (value & typeinfo_mask(ti)) >> ti->low;
 	value <<= ti->shr;
+
 	switch (ti->type) {
 		case RNN_TTYPE_ENUM:
 			vals = ti->eenum->vals;
@@ -198,20 +208,32 @@ char *rnndec_decodeval(struct rnndeccontext *ctx, struct rnntypeinfo *ti, uint64
 				if (!rnndec_varmatch(ctx, &bitfields[i]->varinfo))
 					continue;
 				uint64_t type_mask = typeinfo_mask(&bitfields[i]->typeinfo);
+				if (((value & type_mask) == 0) && is_unknown(bitfields[i]->name))
+					continue;
 				mask |= type_mask;
 				if (bitfields[i]->typeinfo.type == RNN_TTYPE_BOOLEAN) {
+					const char *color = is_unknown(bitfields[i]->name) ?
+							ctx->colors->err : ctx->colors->mod;
 					if (value & type_mask) {
 						if (!res)
-							asprintf (&res, "%s%s%s", ctx->colors->mod, bitfields[i]->name, ctx->colors->reset);
+							asprintf (&res, "%s%s%s", color, bitfields[i]->name, ctx->colors->reset);
 						else {
-							asprintf (&tmp, "%s | %s%s%s", res, ctx->colors->mod, bitfields[i]->name, ctx->colors->reset);
+							asprintf (&tmp, "%s | %s%s%s", res, color, bitfields[i]->name, ctx->colors->reset);
 							free(res);
 							res = tmp;
 						}
 					}
 					continue;
 				}
-				char *subval = rnndec_decodeval(ctx, &bitfields[i]->typeinfo, value & type_mask);
+				char *subval;
+				if (is_unknown(bitfields[i]->name) && (bitfields[i]->typeinfo.type != RNN_TTYPE_A3XX_REGID)) {
+					uint64_t field_val = value & type_mask;
+					field_val = (field_val & typeinfo_mask(&bitfields[i]->typeinfo)) >> bitfields[i]->typeinfo.low;
+					field_val <<= bitfields[i]->typeinfo.shr;
+					asprintf (&subval, "%s%#"PRIx64"%s", ctx->colors->err, field_val, ctx->colors->reset);
+				} else {
+					subval = rnndec_decodeval(ctx, &bitfields[i]->typeinfo, value & type_mask);
+				}
 				if (!res)
 					asprintf (&res, "%s%s%s = %s", ctx->colors->rname, bitfields[i]->name, ctx->colors->reset, subval);
 				else {
@@ -268,11 +290,10 @@ char *rnndec_decodeval(struct rnndeccontext *ctx, struct rnntypeinfo *ti, uint64
 		case RNN_TTYPE_BOOLEAN:
 			if (value == 0) {
 				asprintf (&res, "%sFALSE%s", ctx->colors->eval, ctx->colors->reset);
-				break;
 			} else if (value == 1) {
 				asprintf (&res, "%sTRUE%s", ctx->colors->eval, ctx->colors->reset);
-				break;
 			}
+			break;
 		case RNN_TTYPE_FLOAT: {
 			union { uint64_t i; float f; double d; } val;
 			val.i = value;
