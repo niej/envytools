@@ -163,7 +163,7 @@ static void printtypeinfo (struct rnntypeinfo *ti, struct rnnbitfield *bf,
 	}
 
 	/* for boolean, just generate a #define flag.. rather than inline fxn */
-	if (intype == RNN_TTYPE_BOOLEAN) {
+	if (bf && (intype == RNN_TTYPE_BOOLEAN)) {
 		printdef(bf->fullname, 0, 0, mask, file);
 		return;
 	}
