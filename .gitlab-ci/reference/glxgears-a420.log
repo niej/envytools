@@ -1211,8 +1211,8 @@ t3			opcode: CP_DRAW_INDX_OFFSET (38) (7 dwords)
 				{ NUM_INSTANCES = 1 }
 				{ NUM_INDICES = 240 }
 				{ FIRST_INDX = 0 }
-				{ INDX_BASE_LO = 0x10bd0000 }
-				{ INDX_BASE_HI = 0x1e0 }
+				{ INDX_BASE = 0x10bd0000 }
+				{ INDX_SIZE = 480 }
 			draw[1] register values
 !+	00000007			CP_SCRATCH[0x5].REG: 0x7
 			:0,7,115,8
@@ -1364,8 +1364,8 @@ t3			opcode: CP_DRAW_INDX_OFFSET (38) (7 dwords)
 				{ NUM_INSTANCES = 1 }
 				{ NUM_INDICES = 120 }
 				{ FIRST_INDX = 0 }
-				{ INDX_BASE_LO = 0x10bd01e0 }
-				{ INDX_BASE_HI = 0xf0 }
+				{ INDX_BASE = 0x10bd01e0 }
+				{ INDX_SIZE = 240 }
 			draw[2] register values
 !+	0000000d			CP_SCRATCH[0x5].REG: 0xd
 			:0,13,115,14
@@ -1429,8 +1429,8 @@ t3			opcode: CP_DRAW_INDX_OFFSET (38) (7 dwords)
 				{ NUM_INSTANCES = 1 }
 				{ NUM_INDICES = 240 }
 				{ FIRST_INDX = 0 }
-				{ INDX_BASE_LO = 0x10bd02d0 }
-				{ INDX_BASE_HI = 0x1e0 }
+				{ INDX_BASE = 0x10bd02d0 }
+				{ INDX_SIZE = 480 }
 			draw[3] register values
 !+	00000013			CP_SCRATCH[0x5].REG: 0x13
 			:0,19,115,20
@@ -1470,8 +1470,8 @@ t3			opcode: CP_DRAW_INDX_OFFSET (38) (7 dwords)
 				{ NUM_INSTANCES = 1 }
 				{ NUM_INDICES = 120 }
 				{ FIRST_INDX = 0 }
-				{ INDX_BASE_LO = 0x10bd04b0 }
-				{ INDX_BASE_HI = 0xf0 }
+				{ INDX_BASE = 0x10bd04b0 }
+				{ INDX_SIZE = 240 }
 			draw[4] register values
 !+	00000019			CP_SCRATCH[0x5].REG: 0x19
 			:0,25,115,26
@@ -1802,8 +1802,8 @@ t3			opcode: CP_DRAW_INDX_OFFSET (38) (7 dwords)
 				{ NUM_INSTANCES = 1 }
 				{ NUM_INDICES = 480 }
 				{ FIRST_INDX = 0 }
-				{ INDX_BASE_LO = 0x10bd05a0 }
-				{ INDX_BASE_HI = 0x3c0 }
+				{ INDX_BASE = 0x10bd05a0 }
+				{ INDX_SIZE = 960 }
 			draw[5] register values
 !+	0000001f			CP_SCRATCH[0x5].REG: 0x1f
 			:0,31,115,32
@@ -2197,8 +2197,8 @@ t3			opcode: CP_DRAW_INDX_OFFSET (38) (7 dwords)
 				{ NUM_INSTANCES = 1 }
 				{ NUM_INDICES = 120 }
 				{ FIRST_INDX = 0 }
-				{ INDX_BASE_LO = 0x10bd0960 }
-				{ INDX_BASE_HI = 0xf0 }
+				{ INDX_BASE = 0x10bd0960 }
+				{ INDX_SIZE = 240 }
 			draw[6] register values
 !+	00000025			CP_SCRATCH[0x5].REG: 0x25
 			:0,37,115,38
@@ -2621,8 +2621,8 @@ t3			opcode: CP_DRAW_INDX_OFFSET (38) (7 dwords)
 				{ NUM_INSTANCES = 1 }
 				{ NUM_INDICES = 120 }
 				{ FIRST_INDX = 0 }
-				{ INDX_BASE_LO = 0x10bd0a50 }
-				{ INDX_BASE_HI = 0xf0 }
+				{ INDX_BASE = 0x10bd0a50 }
+				{ INDX_SIZE = 240 }
 			draw[7] register values
 !+	0000002b			CP_SCRATCH[0x5].REG: 0x2b
 			:0,43,115,44
@@ -2746,8 +2746,8 @@ t3			opcode: CP_DRAW_INDX_OFFSET (38) (7 dwords)
 				{ NUM_INSTANCES = 1 }
 				{ NUM_INDICES = 60 }
 				{ FIRST_INDX = 0 }
-				{ INDX_BASE_LO = 0x10bd0b40 }
-				{ INDX_BASE_HI = 0x78 }
+				{ INDX_BASE = 0x10bd0b40 }
+				{ INDX_SIZE = 120 }
 			draw[8] register values
 !+	00000031			CP_SCRATCH[0x5].REG: 0x31
 			:0,49,115,50
@@ -2811,8 +2811,8 @@ t3			opcode: CP_DRAW_INDX_OFFSET (38) (7 dwords)
 				{ NUM_INSTANCES = 1 }
 				{ NUM_INDICES = 120 }
 				{ FIRST_INDX = 0 }
-				{ INDX_BASE_LO = 0x10bd0bb8 }
-				{ INDX_BASE_HI = 0xf0 }
+				{ INDX_BASE = 0x10bd0bb8 }
+				{ INDX_SIZE = 240 }
 			draw[9] register values
 !+	00000037			CP_SCRATCH[0x5].REG: 0x37
 			:0,55,115,56
@@ -2852,8 +2852,8 @@ t3			opcode: CP_DRAW_INDX_OFFSET (38) (7 dwords)
 				{ NUM_INSTANCES = 1 }
 				{ NUM_INDICES = 60 }
 				{ FIRST_INDX = 0 }
-				{ INDX_BASE_LO = 0x10bd0ca8 }
-				{ INDX_BASE_HI = 0x78 }
+				{ INDX_BASE = 0x10bd0ca8 }
+				{ INDX_SIZE = 120 }
 			draw[10] register values
 !+	0000003d			CP_SCRATCH[0x5].REG: 0x3d
 			:0,61,115,62
@@ -3184,8 +3184,8 @@ t3			opcode: CP_DRAW_INDX_OFFSET (38) (7 dwords)
 				{ NUM_INSTANCES = 1 }
 				{ NUM_INDICES = 240 }
 				{ FIRST_INDX = 0 }
-				{ INDX_BASE_LO = 0x10bd0d20 }
-				{ INDX_BASE_HI = 0x1e0 }
+				{ INDX_BASE = 0x10bd0d20 }
+				{ INDX_SIZE = 480 }
 			draw[11] register values
 !+	00000043			CP_SCRATCH[0x5].REG: 0x43
 			:0,67,115,68
@@ -3579,8 +3579,8 @@ t3			opcode: CP_DRAW_INDX_OFFSET (38) (7 dwords)
 				{ NUM_INSTANCES = 1 }
 				{ NUM_INDICES = 60 }
 				{ FIRST_INDX = 0 }
-				{ INDX_BASE_LO = 0x10bd0f00 }
-				{ INDX_BASE_HI = 0x78 }
+				{ INDX_BASE = 0x10bd0f00 }
+				{ INDX_SIZE = 120 }
 			draw[12] register values
 !+	00000049			CP_SCRATCH[0x5].REG: 0x49
 			:0,73,115,74
@@ -4003,8 +4003,8 @@ t3			opcode: CP_DRAW_INDX_OFFSET (38) (7 dwords)
 				{ NUM_INSTANCES = 1 }
 				{ NUM_INDICES = 120 }
 				{ FIRST_INDX = 0 }
-				{ INDX_BASE_LO = 0x10bd0f78 }
-				{ INDX_BASE_HI = 0xf0 }
+				{ INDX_BASE = 0x10bd0f78 }
+				{ INDX_SIZE = 240 }
 			draw[13] register values
 !+	0000004f			CP_SCRATCH[0x5].REG: 0x4f
 			:0,79,115,80
@@ -4128,8 +4128,8 @@ t3			opcode: CP_DRAW_INDX_OFFSET (38) (7 dwords)
 				{ NUM_INSTANCES = 1 }
 				{ NUM_INDICES = 60 }
 				{ FIRST_INDX = 0 }
-				{ INDX_BASE_LO = 0x10bd1068 }
-				{ INDX_BASE_HI = 0x78 }
+				{ INDX_BASE = 0x10bd1068 }
+				{ INDX_SIZE = 120 }
 			draw[14] register values
 !+	00000055			CP_SCRATCH[0x5].REG: 0x55
 			:0,85,115,86
@@ -4193,8 +4193,8 @@ t3			opcode: CP_DRAW_INDX_OFFSET (38) (7 dwords)
 				{ NUM_INSTANCES = 1 }
 				{ NUM_INDICES = 120 }
 				{ FIRST_INDX = 0 }
-				{ INDX_BASE_LO = 0x10bd10e0 }
-				{ INDX_BASE_HI = 0xf0 }
+				{ INDX_BASE = 0x10bd10e0 }
+				{ INDX_SIZE = 240 }
 			draw[15] register values
 !+	0000005b			CP_SCRATCH[0x5].REG: 0x5b
 			:0,91,115,92
@@ -4234,8 +4234,8 @@ t3			opcode: CP_DRAW_INDX_OFFSET (38) (7 dwords)
 				{ NUM_INSTANCES = 1 }
 				{ NUM_INDICES = 60 }
 				{ FIRST_INDX = 0 }
-				{ INDX_BASE_LO = 0x10bd11d0 }
-				{ INDX_BASE_HI = 0x78 }
+				{ INDX_BASE = 0x10bd11d0 }
+				{ INDX_SIZE = 120 }
 			draw[16] register values
 !+	00000061			CP_SCRATCH[0x5].REG: 0x61
 			:0,97,115,98
@@ -4566,8 +4566,8 @@ t3			opcode: CP_DRAW_INDX_OFFSET (38) (7 dwords)
 				{ NUM_INSTANCES = 1 }
 				{ NUM_INDICES = 240 }
 				{ FIRST_INDX = 0 }
-				{ INDX_BASE_LO = 0x10bd1248 }
-				{ INDX_BASE_HI = 0x1e0 }
+				{ INDX_BASE = 0x10bd1248 }
+				{ INDX_SIZE = 480 }
 			draw[17] register values
 !+	00000067			CP_SCRATCH[0x5].REG: 0x67
 			:0,103,115,104
@@ -4961,8 +4961,8 @@ t3			opcode: CP_DRAW_INDX_OFFSET (38) (7 dwords)
 				{ NUM_INSTANCES = 1 }
 				{ NUM_INDICES = 60 }
 				{ FIRST_INDX = 0 }
-				{ INDX_BASE_LO = 0x10bd1428 }
-				{ INDX_BASE_HI = 0x78 }
+				{ INDX_BASE = 0x10bd1428 }
+				{ INDX_SIZE = 120 }
 			draw[18] register values
 !+	0000006d			CP_SCRATCH[0x5].REG: 0x6d
 			:0,109,115,110
