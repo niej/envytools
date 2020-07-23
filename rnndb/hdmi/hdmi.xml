@@ -131,11 +131,11 @@ xsi:schemaLocation="http://nouveau.freedesktop.org/ rules-ng.xsd">
 		<bitfield name="GENERIC1_LINE" low="24" high="29" type="uint"/>
 	</reg32>
 	<reg32 offset="0x00040" name="GC">
-		<bitfield name="MUTE" pos="0"/>
+		<bitfield name="MUTE" pos="0" type="boolean"/>
 	</reg32>
 	<reg32 offset="0x00044" name="AUDIO_PKT_CTRL2">
 		<bitfield name="OVERRIDE" pos="0" type="boolean"/>
-		<bitfield name="LAYOUT" pos="1"/> <!-- 1 for >2 channels -->
+		<bitfield name="LAYOUT" pos="1" type="boolean"/> <!-- 1 for >2 channels -->
 	</reg32>
 
 	<!--
@@ -279,7 +279,7 @@ xsi:schemaLocation="http://nouveau.freedesktop.org/ rules-ng.xsd">
 		<bitfield name="TRANSACTION_CNT" low="20" high="21" type="uint"/>
 	</reg32>
 	<reg32 offset="0x00210" name="DDC_ARBITRATION">
-		<bitfield name="HW_ARBITRATION" pos="4"/>
+		<bitfield name="HW_ARBITRATION" pos="4" type="boolean"/>
 	</reg32>
 	<reg32 offset="0x00214" name="DDC_INT_CTRL">
 		<!--
@@ -394,8 +394,8 @@ xsi:schemaLocation="http://nouveau.freedesktop.org/ rules-ng.xsd">
 	</reg32>
 
 	<reg32 offset="0x00250" name="HPD_INT_STATUS">
-		<bitfield name="INT" pos="0"/>  <!-- an irq has occurred -->
-		<bitfield name="CABLE_DETECTED" pos="1"/>
+		<bitfield name="INT" pos="0" type="boolean"/>  <!-- an irq has occurred -->
+		<bitfield name="CABLE_DETECTED" pos="1" type="boolean"/>
 	</reg32>
 	<reg32 offset="0x00254" name="HPD_INT_CTRL">
 		<!-- (this useful comment was removed in df6b645.. git archaeology is fun)
