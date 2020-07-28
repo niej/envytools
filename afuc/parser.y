@@ -44,6 +44,7 @@ extern void yy_delete_buffer(YY_BUFFER_STATE);
 
 int yyparse(void);
 
+void yyerror(const char *error);
 void yyerror(const char *error)
 {
 	fprintf(stderr, "error at line %d: %s\n", yyget_lineno(), error);
@@ -116,15 +117,6 @@ label(const char *str)
 	uint32_t num;
 	const char *str;
 }
-
-%{
-static void print_token(FILE *file, int type, YYSTYPE value)
-{
-	fprintf(file, "\ntype: %d\n", type);
-}
-
-#define YYPRINT(file, type, value) print_token(file, type, value)
-%}
 
 %token <num> T_INT
 %token <num> T_HEX

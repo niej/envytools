@@ -51,7 +51,7 @@ static const char *levels[] = {
 		"x",
 };
 
-enum debug_t debug;
+static enum debug_t debug;
 
 /*
  * ALU instructions:
@@ -96,23 +96,23 @@ static void print_dstreg(uint32_t num, uint32_t mask, uint32_t dst_exp)
 	}
 }
 
-static void print_export_comment(uint32_t num, enum shader_t type)
+static void print_export_comment(uint32_t num, gl_shader_stage type)
 {
 	const char *name = NULL;
 	switch (type) {
-	case SHADER_VERTEX:
+	case MESA_SHADER_VERTEX:
 		switch (num) {
 		case 62: name = "gl_Position";  break;
 		case 63: name = "gl_PointSize"; break;
 		}
 		break;
-	case SHADER_FRAGMENT:
+	case MESA_SHADER_FRAGMENT:
 		switch (num) {
 		case 0:  name = "gl_FragColor"; break;
 		}
 		break;
 	default:
-		break;
+		assert(!"not reached");
 	}
 	/* if we had a symbol table here, we could look
 	 * up the name of the varying..
@@ -212,7 +212,7 @@ struct {
 };
 
 static int disasm_alu(uint32_t *dwords, uint32_t alu_off,
-		int level, int sync, enum shader_t type)
+		int level, int sync, gl_shader_stage type)
 {
 	instr_alu_t *alu = (instr_alu_t *)dwords;
 
@@ -579,7 +579,8 @@ static void print_cf(instr_cf_t *cf, int level)
 {
 	printf("%s", levels[level]);
 	if (debug & PRINT_RAW) {
-		uint16_t *words = (uint16_t *)cf;
+		uint16_t words[3];
+		memcpy(&words, cf, sizeof(words));
 		printf("    %04x %04x %04x            \t",
 				words[0], words[1], words[2]);
 	}
@@ -595,7 +596,7 @@ static void print_cf(instr_cf_t *cf, int level)
  *   2) ALU and FETCH instructions
  */
 
-int disasm_a2xx(uint32_t *dwords, int sizedwords, int level, enum shader_t type)
+int disasm_a2xx(uint32_t *dwords, int sizedwords, int level, gl_shader_stage type)
 {
 	instr_cf_t *cfs = (instr_cf_t *)dwords;
 	int idx, max_idx;
@@ -631,7 +632,7 @@ int disasm_a2xx(uint32_t *dwords, int sizedwords, int level, enum shader_t type)
 	return 0;
 }
 
-void disasm_set_debug(enum debug_t d)
+void disasm_a2xx_set_debug(enum debug_t d)
 {
 	debug = d;
 }

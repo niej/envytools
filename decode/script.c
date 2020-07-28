@@ -26,7 +26,6 @@
  *    Rob Clark <robclark@freedesktop.org>
  */
 
-#define _GNU_SOURCE
 #define LUA_COMPAT_APIINTCASTS
 
 #include <stdio.h>
@@ -38,6 +37,7 @@
 #include <assert.h>
 
 #include "script.h"
+#include "cffdec.h"
 #include "rnnutil.h"
 
 static lua_State *L;
@@ -49,10 +49,6 @@ static lua_State *L;
 #else
 #define DBG(fmt, ...) do {} while (0)
 #endif
-
-uint32_t reg_written(uint32_t regbase);
-uint32_t reg_lastval(uint32_t regbase);
-uint32_t reg_val(uint32_t regbase);
 
 /* An rnn based decoder, which can either be decoding current register
  * values, or domain based decoding of a pm4 packet.
@@ -71,7 +67,7 @@ static inline struct rnndec *to_rnndec(struct rnn *rnn)
 	return (struct rnndec *)rnn;
 }
 
-uint32_t rnn_val(struct rnn *rnn, uint32_t regbase)
+static uint32_t rnn_val(struct rnn *rnn, uint32_t regbase)
 {
 	struct rnndec *rnndec = to_rnndec(rnn);
 

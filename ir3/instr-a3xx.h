@@ -27,6 +27,7 @@
 #define PACKED __attribute__((__packed__))
 
 #include <stdint.h>
+#include <stdio.h>
 #include <stdbool.h>
 #include <assert.h>
 
@@ -46,7 +47,6 @@ void ir3_assert_handler(const char *expr, const char *file, int line,
 			assert(expr); \
 		} \
 	} while (0)
-
 /* size of largest OPC field of all the instruction categories: */
 #define NOPC_BITS 6
 
@@ -201,6 +201,9 @@ typedef enum {
 	OPC_DSYPP_1         = _OPC(5, 25),
 	OPC_RGETPOS         = _OPC(5, 26),
 	OPC_RGETINFO        = _OPC(5, 27),
+	/* cat5 meta instructions, placed above the cat5 opc field's size */
+	OPC_DSXPP_MACRO     = _OPC(5, 32),
+	OPC_DSYPP_MACRO     = _OPC(5, 33),
 
 	/* category 6: */
 	OPC_LDG             = _OPC(6, 0),        /* load-global */
@@ -237,10 +240,32 @@ typedef enum {
 	/* category 7: */
 	OPC_BAR             = _OPC(7, 0),
 	OPC_FENCE           = _OPC(7, 1),
+
+	/* meta instructions (category -1): */
+	/* placeholder instr to mark shader inputs: */
+	OPC_META_INPUT      = _OPC(-1, 0),
+	/* The "collect" and "split" instructions are used for keeping
+	 * track of instructions that write to multiple dst registers
+	 * (split) like texture sample instructions, or read multiple
+	 * consecutive scalar registers (collect) (bary.f, texture samp)
+	 *
+	 * A "split" extracts a scalar component from a vecN, and a
+	 * "collect" gathers multiple scalar components into a vecN
+	 */
+	OPC_META_SPLIT      = _OPC(-1, 2),
+	OPC_META_COLLECT    = _OPC(-1, 3),
+
+	/* placeholder for texture fetches that run before FS invocation
+	 * starts:
+	 */
+	OPC_META_TEX_PREFETCH = _OPC(-1, 4),
+
 } opc_t;
 
 #define opc_cat(opc) ((int)((opc) >> NOPC_BITS))
 #define opc_op(opc)  ((unsigned)((opc) & ((1 << NOPC_BITS) - 1)))
+
+const char *disasm_a3xx_instr_name(opc_t opc);
 
 typedef enum {
 	TYPE_F16 = 0,
@@ -307,6 +332,21 @@ typedef union PACKED {
 	int32_t  idummy13  : 13;
 	int32_t  idummy8   : 8;
 } reg_t;
+
+/* comp:
+ *   0 - x
+ *   1 - y
+ *   2 - z
+ *   3 - w
+ */
+static inline uint32_t regid(int num, int comp)
+{
+	return (num << 2) | (comp & 0x3);
+}
+
+#define INVALID_REG      regid(63, 0)
+#define VALIDREG(r)      ((r) != INVALID_REG)
+#define CONDREG(r, val)  COND(VALIDREG(r), (val))
 
 /* special registers: */
 #define REG_A0 61       /* address register */
@@ -708,7 +748,8 @@ typedef struct PACKED {
 typedef struct PACKED {
 	/* dword0: */
 	uint32_t mustbe0  : 1;
-	uint32_t src1     : 13;
+	uint32_t src1     : 8;
+	uint32_t pad      : 5;
 	uint32_t ignore0  : 8;
 	uint32_t src1_im  : 1;
 	uint32_t src2_im  : 1;
@@ -721,15 +762,11 @@ typedef struct PACKED {
 /* dword1 encoding for dst_off: */
 typedef struct PACKED {
 	/* dword0: */
-	uint32_t dword0;
+	uint32_t dw0_pad1 : 9;
+	int32_t off_high : 5;
+	uint32_t dw0_pad2 : 18;
 
-	/* note: there is some weird stuff going on where sometimes
-	 * cat6->a.off is involved.. but that seems like a bug in
-	 * the blob, since it is used even if !cat6->src_off
-	 * It would make sense for there to be some more bits to
-	 * bring us to 11 bits worth of offset, but not sure..
-	 */
-	int32_t off       : 8;
+	uint32_t off      : 8;
 	uint32_t mustbe1  : 1;
 	uint32_t dst      : 8;
 	uint32_t pad1     : 15;
@@ -770,7 +807,7 @@ typedef struct PACKED {
 	uint32_t src_ssbo : 8;
 	uint32_t pad2     : 3;  // type
 	uint32_t g        : 1;
-	uint32_t pad3     : 1;
+	uint32_t src_ssbo_im : 1;
 	uint32_t pad4     : 10; // opc/jmp_tgt/sync/opc_cat
 } instr_cat6ldgb_t;
 
@@ -1109,7 +1146,5 @@ static inline bool is_cat3_float(opc_t opc)
 		return false;
 	}
 }
-
-int disasm_a3xx(uint32_t *dwords, int sizedwords, int level, FILE *out, unsigned gpu_id);
 
 #endif /* INSTR_A3XX_H_ */
