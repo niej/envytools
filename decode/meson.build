@@ -47,6 +47,7 @@ libfreedreno_cffdec = static_library(
     'disasm-a3xx.c',
     'instr-a2xx.h',
     'instr-a3xx.h',
+    freedreno_xml_header_files,
   ],
   include_directories: [
     inc_freedreno,

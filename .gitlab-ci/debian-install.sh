@@ -25,6 +25,8 @@ apt-get install -y --no-remove \
   build-essential \
   meson \
   pkg-config \
+  python3 \
+  python3-setuptools \
   flex \
   bison \
   liblua5.3-dev \
