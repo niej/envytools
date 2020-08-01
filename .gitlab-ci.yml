@@ -62,6 +62,6 @@ build:
     - meson debug --prefix=`pwd`/install
     - ninja -C debug install
     - ./.gitlab-ci/genoutput.sh
-    - diff -r .gitlab-ci/reference .gitlab-ci/out
+    - diff -r -I '^Reading' -I '^Parsing' -I 'Assertion' .gitlab-ci/reference .gitlab-ci/out
     - ./debug/rnn/headergen2 adreno.xml
     - ./debug/rnn/headergen2 msm.xml
