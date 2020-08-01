@@ -76,7 +76,7 @@ with_tools = ['freedreno']
 inc_include = include_directories('.')
 inc_src = include_directories('.')
 
-inc_freedreno = include_directories(['.', './registers'])
+inc_freedreno = include_directories(['.', './registers', './common'])
 inc_freedreno_rnn = include_directories('rnn')
 
 dep_libxml2 = dependency('libxml-2.0', required: true)
@@ -89,8 +89,9 @@ prog_flex = find_program('flex', required: true)
 # to make lua/libarchive required, whereas in mesa they are optional.
 # The easiest way to accomplish that would be to move them here.
 
-# Everything that depends on rnn requires (indirectly) libxml2:
 subdir('registers')
+subdir('ir2')
+subdir('ir3')
 subdir('rnn')
 subdir('decode')
 subdir('afuc')
