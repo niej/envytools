@@ -20,6 +20,6 @@ add_subdirectory(afuc)
 add_subdirectory(cffdump)
 
 install(DIRECTORY include/ DESTINATION include/envytools)
-install(DIRECTORY rnndb DESTINATION share)
+install(DIRECTORY registers/ DESTINATION share)
 install(DIRECTORY hwdocs DESTINATION share/doc/envytools)
 install(FILES README DESTINATION share/doc/envytools)
