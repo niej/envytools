@@ -23,7 +23,7 @@ apt-get dist-upgrade -y
 
 apt-get install -y --no-remove \
   build-essential \
-  cmake \
+  meson \
   pkg-config \
   flex \
   bison \

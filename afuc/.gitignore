@@ -1,5 +1,0 @@
-asm
-disasm
-parser.c
-parser.h
-lexer.c

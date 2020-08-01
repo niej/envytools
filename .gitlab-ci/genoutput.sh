@@ -8,8 +8,9 @@ set -x
 set -e
 
 # input/output directories:
-traces=.gitlab-ci/traces
-output=.gitlab-ci/out
+base=.
+traces=$base/.gitlab-ci/traces
+output=$base/.gitlab-ci/out
 
 # use the --update arg to update reference output:
 if [ "$1" = "--update" ]; then
@@ -19,8 +20,8 @@ fi
 mkdir -p $output
 
 # binary locations:
-cffdump=./decode/cffdump
-crashdec=./decode/crashdec
+cffdump=./install/bin/cffdump
+crashdec=./install/bin/crashdec
 
 # helper to filter out paths that can change depending on
 # who is building:
@@ -29,7 +30,8 @@ basepath=`dirname $basepath`
 basepath=`pwd $basepath`
 filter() {
 	out=$1
-	grep -vF "$basepath" > $out
+	grep -vF "$basepath
+Assertion" > $out
 }
 
 #
@@ -43,7 +45,7 @@ $cffdump --frame 0 --once $traces/es2gears-a320.rd.gz | filter $output/es2gears-
 $cffdump --frame 1 --once $traces/glxgears-a420.rd.gz | filter $output/glxgears-a420.log
 
 # test a lua script to ensure we don't break scripting API:
-$cffdump --script `dirname $cffdump`/scripts/parse-submits.lua $traces/shadow.rd.gz | filter $output/shadow.log
+$cffdump --script $base/decode/scripts/parse-submits.lua $traces/shadow.rd.gz | filter $output/shadow.log
 
 $crashdec -sf $traces/crash.devcore | filter $output/crash.log
 

@@ -14,7 +14,7 @@
 # repository's registry will be used there as well.
 variables:
   UPSTREAM_REPO: freedreno/envytools
-  DEBIAN_TAG: "2019-11-16-rob-b"
+  DEBIAN_TAG: "2020-08-01-meson"
   DEBIAN_VERSION: buster-slim
   DEBIAN_IMAGE: "$CI_REGISTRY_IMAGE/debian/$DEBIAN_VERSION:$DEBIAN_TAG"
 
@@ -59,9 +59,9 @@ build:
   needs:
     - debian
   script:
-    - cmake .
-    - make -j4
+    - meson debug --prefix=`pwd`/install
+    - ninja -C debug install
     - ./.gitlab-ci/genoutput.sh
     - diff -r .gitlab-ci/reference .gitlab-ci/out
-    - ./rnn/headergen2 adreno.xml
-    - ./rnn/headergen2 msm.xml
+    - ./debug/rnn/headergen2 adreno.xml
+    - ./debug/rnn/headergen2 msm.xml
