@@ -9,7 +9,7 @@ include_directories(include)
 add_subdirectory(util)
 add_subdirectory(rnn)
 add_subdirectory(afuc)
-add_subdirectory(cffdump)
+add_subdirectory(decode)
 
 install(DIRECTORY include/ DESTINATION include/envytools)
 install(DIRECTORY registers/ DESTINATION share)

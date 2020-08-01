@@ -19,8 +19,8 @@ fi
 mkdir -p $output
 
 # binary locations:
-cffdump=./cffdump/cffdump
-crashdec=./cffdump/crashdec
+cffdump=./decode/cffdump
+crashdec=./decode/crashdec
 
 # helper to filter out paths that can change depending on
 # who is building:
