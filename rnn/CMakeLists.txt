@@ -16,6 +16,8 @@ add_library(rnn rnn.c rnndec.c)
 
 add_executable(headergen2 headergen2.c)
 
+add_library(envyutil aprintf.c colors.c path.c)
+
 target_link_libraries(rnn ${LIBXML2_LIBRARIES} envyutil)
 target_link_libraries(headergen2 rnn)
 

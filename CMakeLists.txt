@@ -4,9 +4,8 @@ enable_testing()
 
 SET(CMAKE_C_FLAGS "-Wall")
 
-include_directories(include)
+include_directories(rnn)
 
-add_subdirectory(util)
 add_subdirectory(rnn)
 add_subdirectory(afuc)
 add_subdirectory(decode)
