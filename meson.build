@@ -83,7 +83,20 @@ rnn_src_path = meson.source_root() + '/registers'
 rnn_install_path = get_option('datadir') + '/freedreno/registers'
 rnn_path = rnn_src_path + ':' + get_option('prefix') + '/' + rnn_install_path
 
-dep_libxml2 = dependency('libxml-2.0', required: true)
+dep_lua = dependency('lua53', required: false)
+if not dep_lua.found()
+  dep_lua = dependency('lua52', required: false)
+endif
+if not dep_lua.found()
+  dep_lua = dependency('lua', required: true)
+endif
+
+dep_libarchive = dependency('libarchive', required: true)
+dep_libxml2 = dependency('libxml-2.0', required: false)
+prog_gzip = find_program('gzip', required: false)
+
+install_fd_decode_tools = true
+
 prog_python = import('python').find_installation('python3')
 prog_bison = find_program('bison', required: true)
 prog_flex = find_program('flex', required: true)
