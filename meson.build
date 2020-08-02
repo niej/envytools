@@ -79,6 +79,10 @@ inc_src = include_directories('stub-mesa')
 inc_freedreno = include_directories(['.', './registers', './common'])
 inc_freedreno_rnn = include_directories('rnn')
 
+rnn_src_path = meson.source_root() + '/registers'
+rnn_install_path = get_option('datadir') + '/freedreno/registers'
+rnn_path = rnn_src_path + ':' + get_option('prefix') + '/' + rnn_install_path
+
 dep_libxml2 = dependency('libxml-2.0', required: true)
 prog_python = import('python').find_installation('python3')
 prog_bison = find_program('bison', required: true)
