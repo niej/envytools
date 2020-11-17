@@ -77,6 +77,9 @@ inc_include = include_directories('.')
 inc_src = include_directories('stub-mesa')
 inc_util = inc_src
 
+null_dep = dependency('', required : false)
+idep_mesautil = null_dep
+
 inc_freedreno = include_directories(['.', './registers', './common'])
 inc_freedreno_rnn = include_directories('rnn')
 
