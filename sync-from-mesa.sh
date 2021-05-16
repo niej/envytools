@@ -20,6 +20,7 @@ sync_paths="
 	afuc
 	common/disasm.h
 	decode
+	isa
 	ir2
 	ir3/disasm-a3xx.c
 	ir3/instr-a3xx.h
