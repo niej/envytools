@@ -35,6 +35,8 @@ files_mesa_util = files(
   'os_file.h',
   'ralloc.c',
   'ralloc.h',
+  'rb_tree.c',
+  'rb_tree.h',
   'set.c',
   'set.h',
   'softfloat.c',
