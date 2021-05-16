@@ -349,4 +349,8 @@ enum pipe_debug_type
    PIPE_DEBUG_TYPE_CONFORMANCE,
 };
 
+
+// HACK
+#define util_cpu_detect() do {} while (0)
+
 #endif /* UTIL_MACROS_H */
