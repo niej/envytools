@@ -79,6 +79,10 @@ syncit() {
 		# HACK: this file doesn't exist on mesa side (yet)
 		inenvytools git checkout registers/.gitignore
 
+		# HACK: this file has hack to not build isa encoder
+		# which depends on too much of ir3/nir/etc
+		inenvytools git checkout isa/meson.build
+
 		inenvytools git add $p
 	done
 

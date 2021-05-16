@@ -89,15 +89,17 @@ encode_files = [
   'isa.h',
 ]
 
-libir3encode = static_library(
-  'ir3encode',
-  encode_files,
-  dependencies: [idep_mesautil, idep_nir],
-  include_directories: [
-    inc_src,
-    inc_include,
-    inc_freedreno,
-    inc_gallium,
-  ],
-  gnu_symbol_visibility: 'hidden',
-)
+## HACK don't try to build encode lib, it depends on too
+## much mesa
+#libir3encode = static_library(
+#  'ir3encode',
+#  encode_files,
+#  dependencies: [idep_mesautil, idep_nir],
+#  include_directories: [
+#    inc_src,
+#    inc_include,
+#    inc_freedreno,
+#    inc_gallium,
+#  ],
+#  gnu_symbol_visibility: 'hidden',
+#)

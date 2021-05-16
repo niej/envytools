@@ -74,11 +74,13 @@ no_override_init_args = []
 # tools:
 with_tools = ['freedreno']
 inc_include = include_directories('.')
+inc_gallium = inc_include
 inc_src = include_directories('stub-mesa')
 inc_util = inc_src
 
 null_dep = dependency('', required : false)
 idep_mesautil = null_dep
+idep_nir = null_dep
 
 inc_freedreno = include_directories(['.', './registers', './common'])
 inc_freedreno_rnn = include_directories('rnn')
@@ -105,12 +107,15 @@ prog_python = import('python').find_installation('python3')
 prog_bison = find_program('bison', required: true)
 prog_flex = find_program('flex', required: true)
 
+subdir('stub-mesa/util')
+
 # TODO in mesa, move other dependencies into src/freedreno/meson.build
 # and out of individual subdirectories.  For envytools tree, we want
 # to make lua/libarchive required, whereas in mesa they are optional.
 # The easiest way to accomplish that would be to move them here.
 
 subdir('registers')
+subdir('isa')
 subdir('ir2')
 subdir('ir3')
 subdir('rnn')

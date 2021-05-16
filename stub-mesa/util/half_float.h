@@ -29,6 +29,7 @@
 #include <stdbool.h>
 #include <stdint.h>
 #include <string.h>
+//#include "util/u_cpu_detect.h"
 
 #if defined(USE_X86_64_ASM)
 #include <immintrin.h>
@@ -42,46 +43,7 @@ extern "C" {
 #define FP16_ZERO    ((uint16_t) 0)
 
 uint16_t _mesa_float_to_half_slow(float val);
-
-union fi {
-   float f;
-   int32_t i;
-   uint32_t ui;
-};
-
-/**
- * Convert a 2-byte half float to a 4-byte float.
- * Based on code from:
- * http://www.opengl.org/discussion_boards/ubb/Forum3/HTML/008786.html
- */
-static inline
-float
-_mesa_half_to_float_slow(uint16_t val)
-{
-   union fi infnan;
-   union fi magic;
-   union fi f32;
-
-   infnan.ui = 0x8f << 23;
-   infnan.f = 65536.0f;
-   magic.ui  = 0xef << 23;
-
-   /* Exponent / Mantissa */
-   f32.ui = (val & 0x7fff) << 13;
-
-   /* Adjust */
-   f32.f *= magic.f;
-   /* XXX: The magic mul relies on denorms being available */
-
-   /* Inf / NaN */
-   if (f32.f >= infnan.f)
-      f32.ui |= 0xff << 23;
-
-   /* Sign */
-   f32.ui |= (uint32_t)(val & 0x8000) << 16;
-
-   return f32.f;
-}
+float _mesa_half_to_float_slow(uint16_t val);
 uint8_t _mesa_half_to_unorm8(uint16_t v);
 uint16_t _mesa_uint16_div_64k_to_half(uint16_t v);
 
