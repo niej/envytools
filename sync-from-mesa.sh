@@ -118,8 +118,8 @@ done
 lastsync=`inenvytoolsq cat .lastsync`
 
 inmesa git reset --hard HEAD
-inmesa git checkout master
-inmesa git pull --rebase origin master
+inmesa git checkout main
+inmesa git pull --rebase origin main
 
 log "Commits available to sync:"
 inmesa git --no-pager log --oneline ${lastsync}..HEAD -- $mesapaths
