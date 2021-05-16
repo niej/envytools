@@ -27,6 +27,7 @@ apt-get install -y --no-remove \
   pkg-config \
   python3 \
   python3-setuptools \
+  python3-mako \
   flex \
   bison \
   liblua5.3-dev \
