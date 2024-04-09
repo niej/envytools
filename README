@@ -23,7 +23,7 @@ Subdirectories:
 
 = Building, installing =
 
-Dependencies: cmake, libxml2, flex, bison, pkg-config
+Dependencies: libarchive, lua, libxml2, flex, bison, pkg-config
 Optional dependencies needed by nva: libpciaccess
 Optional dependencies needed by vdpow: vdpau, libx11
 
@@ -32,14 +32,16 @@ corresponding to the dependencies above.
 
 To build, use
 
- $ cmake .
- $ make
+ $ mkdir build
+ $ cd build
+ $ meson setup ..
+ $ meson compile
 
 To install [which is optional], use
 
- $ make install
+ $ meson install
 
-If you want to install to a non-default directory, you'll also need to pass
-it as an option to cmake before building, eg.:
+If you want to install to a non-default directory, pass the directory with
+--destdir:
 
- $ cmake -D CMAKE_INSTALL_PREFIX:PATH=/usr/local .
+ $ meson install --destdir DESTDIR
